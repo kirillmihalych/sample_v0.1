@@ -94,7 +94,7 @@ const routineSlice = createSlice({
             if (ex.id === ex_id) {
               ex.sets.push({
                 number: short_id,
-                weight: '0',
+                weight: '',
                 reps: '0',
               })
             }
