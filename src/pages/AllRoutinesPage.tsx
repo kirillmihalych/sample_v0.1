@@ -79,6 +79,12 @@ const AllRoutinesPage: FC = () => {
               direction='row'
               justifyContent='space-between'
               alignItems='center'
+              sx={{
+                border: '1px solid #E1E1E1',
+                marginTop: '5px',
+                padding: '0 12px',
+                borderRadius: '5px',
+              }}
               key={routine.id}
             >
               <Link
