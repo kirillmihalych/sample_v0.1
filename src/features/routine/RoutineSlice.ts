@@ -65,7 +65,7 @@ const routineSlice = createSlice({
       let short_id = id.slice(0, 3)
       state.all_routines.push({
         id: short_id,
-        title: 'имя рутины',
+        title: '',
         exs: [],
       })
     },
@@ -77,7 +77,7 @@ const routineSlice = createSlice({
         if (routine.id === id) {
           routine.exs.push({
             id: short_id,
-            title: 'new name',
+            title: '',
             sets: [],
           })
         }
@@ -94,7 +94,7 @@ const routineSlice = createSlice({
             if (ex.id === ex_id) {
               ex.sets.push({
                 number: short_id,
-                weight: '',
+                weight: '0',
                 reps: '0',
               })
             }

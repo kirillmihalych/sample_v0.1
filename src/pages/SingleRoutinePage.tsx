@@ -42,7 +42,7 @@ const SingleRoutinePage: FC = () => {
                     {/* sets */}
                     <Grid item>
                       <Typography variant='h6' color='secondary.dark'>
-                        сет
+                        подходы
                       </Typography>
                       {sets.map((set) => {
                         return (
@@ -81,6 +81,7 @@ const SingleRoutinePage: FC = () => {
                         )
                       })}
                     </Grid>
+                    {/* reps */}
                     <Grid item>
                       <Typography variant='h6' color='secondary.dark'>
                         повторения

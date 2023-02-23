@@ -12,6 +12,28 @@ import {
   removeExercise,
   removeSet,
 } from '../features/routine/RoutineSlice'
+// MUI imports
+import { Container, TextField, Box, Typography, Grid } from '@mui/material'
+import { styled } from '@mui/system'
+// MUI icons
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import Button from '@mui/material/Button'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+
+const MyForm = styled('form')({
+  height: '85vh',
+  marginTop: '2rem',
+  border: '1px solid grey',
+})
+
+const MyBox = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-beetween',
+  alignItems: 'center',
+  margin: 0,
+  padding: 0,
+  bgcolor: 'red',
+})
 
 const RoutineConstructor: FC = () => {
   const dispatch = useAppDispatch()
@@ -24,49 +46,73 @@ const RoutineConstructor: FC = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={submitHandler}>
+    <Container>
+      <MyForm onSubmit={submitHandler}>
         {/* routine */}
-        <input
-          type='text'
-          placeholder={title}
+        <TextField
+          id='standard-basic'
+          label='Имя протокола'
+          variant='filled'
           value={title}
           onChange={(e) =>
             dispatch(setRoutineName({ routine_id, title: e.target.value }))
           }
+          fullWidth
         />
         <div>
           {exs?.map((ex) => {
             const { id: ex_id } = ex
             return (
               // exercise
-              <article key={ex_id}>
-                <input
-                  type='text'
-                  placeholder='имя упражнения'
-                  value={ex.title}
-                  onChange={(e) =>
-                    dispatch(
-                      setExerciseName({
-                        routine_id,
-                        ex_id,
-                        title: e.target.value,
-                      })
-                    )
-                  }
-                />
-                <button
-                  type='button'
-                  onClick={() =>
-                    dispatch(removeExercise({ routine_id, ex_id }))
-                  }
-                >
-                  remove
-                </button>
+              <Grid container key={ex_id}>
+                <Grid item xs={10}>
+                  <TextField
+                    fullWidth
+                    id='filled-basic'
+                    variant='filled'
+                    label='Имя упражнения'
+                    value={ex.title}
+                    onChange={(e) =>
+                      dispatch(
+                        setExerciseName({
+                          routine_id,
+                          ex_id,
+                          title: e.target.value,
+                        })
+                      )
+                    }
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Grid
+                    container
+                    direction='column'
+                    justifyContent='center'
+                    alignItems='center'
+                    height={60}
+                  >
+                    <Button
+                      variant='outlined'
+                      color='primary'
+                      onClick={() =>
+                        dispatch(removeExercise({ routine_id, ex_id }))
+                      }
+                      sx={{
+                        height: 60,
+                        width: '100%',
+                        borderRadius: 0,
+                      }}
+                    >
+                      <DeleteOutlineIcon fontSize='small' />
+                      <Typography>Удалить</Typography>
+                    </Button>
+                  </Grid>
+                </Grid>
+
                 {/* set */}
                 {ex.sets?.map((set) => {
                   return (
-                    <div key={set.number}>
+                    <Grid container key={set.number}>
                       <span>{ex.sets.indexOf(set) + 1}</span>
                       x
                       <input
@@ -110,31 +156,38 @@ const RoutineConstructor: FC = () => {
                       >
                         remove
                       </button>
-                    </div>
+                    </Grid>
                   )
                 })}
-
-                <button
-                  type='button'
+                <Button
+                  variant='contained'
+                  color='secondary'
+                  fullWidth
                   onClick={() => dispatch(addSet({ routine_id, ex_id }))}
                 >
-                  add set
-                </button>
-              </article>
+                  <AddCircleIcon color='inherit' />
+                  <Typography align='center'>Добавить подход</Typography>
+                </Button>
+              </Grid>
             )
           })}
-          <button
-            type='button'
-            onClick={() => dispatch(addExercise(routine_id))}
-          >
-            add ex
-          </button>
+          <MyBox>
+            <Button
+              variant='contained'
+              color='primary'
+              fullWidth
+              onClick={() => dispatch(addExercise(routine_id))}
+            >
+              <AddCircleIcon color='inherit' />
+              <Typography align='center'>Добавить упражнение</Typography>
+            </Button>
+          </MyBox>
         </div>
-      </form>
+      </MyForm>
       <button type='button' onClick={() => dispatch(saveRoutine())}>
         <Link to={`/routine/${routine_id}`}>save routine</Link>
       </button>
-    </div>
+    </Container>
   )
 }
 
