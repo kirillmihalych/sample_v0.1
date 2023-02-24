@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { FC, useState } from 'react'
+import { Link, Link as RouterLink } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import {
   addExercise,
@@ -13,15 +13,23 @@ import {
   removeSet,
 } from '../features/routine/RoutineSlice'
 // MUI imports
-import { Container, TextField, Box, Typography, Grid } from '@mui/material'
+import {
+  Container,
+  TextField,
+  Box,
+  Typography,
+  Grid,
+  IconButton,
+} from '@mui/material'
 import { styled } from '@mui/system'
 // MUI icons
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import Button from '@mui/material/Button'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import DeleteIcon from '@mui/icons-material/Delete'
+import SaveIcon from '@mui/icons-material/Save'
 
 const MyForm = styled('form')({
-  height: '85vh',
   marginTop: '2rem',
   border: '1px solid grey',
 })
@@ -33,6 +41,10 @@ const MyBox = styled(Box)({
   margin: 0,
   padding: 0,
   bgcolor: 'red',
+})
+
+const MyHorizontalLine = styled('hr')({
+  marginBottom: 0,
 })
 
 const RoutineConstructor: FC = () => {
@@ -58,6 +70,7 @@ const RoutineConstructor: FC = () => {
             dispatch(setRoutineName({ routine_id, title: e.target.value }))
           }
           fullWidth
+          required
         />
         <div>
           {exs?.map((ex) => {
@@ -77,7 +90,7 @@ const RoutineConstructor: FC = () => {
                         setExerciseName({
                           routine_id,
                           ex_id,
-                          title: e.target.value,
+                          title: e!.target.value,
                         })
                       )
                     }
@@ -109,56 +122,121 @@ const RoutineConstructor: FC = () => {
                   </Grid>
                 </Grid>
 
-                {/* set */}
-                {ex.sets?.map((set) => {
-                  return (
-                    <Grid container key={set.number}>
-                      <span>{ex.sets.indexOf(set) + 1}</span>
-                      x
-                      <input
-                        type='text'
-                        placeholder='weight'
-                        value={set.weight}
-                        onChange={(e) =>
-                          dispatch(
-                            setExerciseWeight({
-                              routine_id,
-                              ex_id,
-                              title: e.target.value,
-                              number: set.number,
-                            })
-                          )
-                        }
-                      />
-                      x
-                      <input
-                        type='text'
-                        placeholder='reps'
-                        value={set.reps}
-                        onChange={(e) =>
-                          dispatch(
-                            setExerciseReps({
-                              routine_id,
-                              ex_id,
-                              title: e.target.value,
-                              number: set.number,
-                            })
-                          )
-                        }
-                      />
-                      <button
-                        type='button'
-                        onClick={() =>
-                          dispatch(
-                            removeSet({ routine_id, ex_id, number: set.number })
-                          )
-                        }
-                      >
-                        remove
-                      </button>
-                    </Grid>
-                  )
-                })}
+                {/* sets */}
+                <Grid container>
+                  {/* подходы */}
+                  <Grid item xs={3}>
+                    <Typography align='center'>Сеты</Typography>
+                    <MyHorizontalLine />
+                    {ex.sets?.map((set) => {
+                      return (
+                        <Typography
+                          align='center'
+                          key={set.number}
+                          sx={{
+                            height: '59px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {ex.sets.indexOf(set) + 1}
+                        </Typography>
+                      )
+                    })}
+                  </Grid>
+                  {/* веса */}
+                  <Grid item xs={3}>
+                    <Typography>Веса</Typography>
+                    <MyHorizontalLine />
+                    {ex.sets?.map((set) => {
+                      return (
+                        <TextField
+                          key={set.number}
+                          id='outlined-basic'
+                          variant='outlined'
+                          value={set.weight}
+                          onChange={(e) =>
+                            dispatch(
+                              setExerciseWeight({
+                                routine_id,
+                                ex_id,
+                                title: e.target.value,
+                                number: set.number,
+                              })
+                            )
+                          }
+                          sx={{
+                            height: '59px',
+                          }}
+                        />
+                      )
+                    })}
+                  </Grid>
+                  {/* повторы */}
+                  <Grid item xs={3}>
+                    <Typography>Повторы</Typography>
+                    <MyHorizontalLine />
+                    {ex.sets?.map((set) => {
+                      return (
+                        <TextField
+                          key={set.number}
+                          id='outlined-basic'
+                          // label='кг'
+                          variant='outlined'
+                          value={set.reps}
+                          onChange={(e) =>
+                            dispatch(
+                              setExerciseReps({
+                                routine_id,
+                                ex_id,
+                                title: e.target.value,
+                                number: set.number,
+                              })
+                            )
+                          }
+                          sx={{
+                            height: '59px',
+                          }}
+                        />
+                      )
+                    })}
+                  </Grid>
+                  {/* кнопки */}
+                  <Grid item xs={3}>
+                    <Typography height={'28px'} />
+                    <MyHorizontalLine />
+                    {ex.sets?.map((set) => {
+                      return (
+                        <Box
+                          key={set.number}
+                          sx={{
+                            height: '59px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <IconButton
+                            onClick={() =>
+                              dispatch(
+                                removeSet({
+                                  routine_id,
+                                  ex_id,
+                                  number: set.number,
+                                })
+                              )
+                            }
+                          >
+                            <DeleteIcon color='primary' />
+                          </IconButton>
+                        </Box>
+                      )
+                    })}
+                  </Grid>
+                </Grid>
+
+                {/* добавить подход */}
                 <Button
                   variant='contained'
                   color='secondary'
@@ -182,11 +260,23 @@ const RoutineConstructor: FC = () => {
               <Typography align='center'>Добавить упражнение</Typography>
             </Button>
           </MyBox>
+          <MyBox>
+            <Button
+              disabled={title ? false : true}
+              component={Link}
+              to={`/routine/${routine_id}`}
+              variant='contained'
+              color='secondary'
+              fullWidth
+              onClick={() => dispatch(saveRoutine())}
+              sx={{ border: '1px solid black' }}
+            >
+              <SaveIcon color='inherit' />
+              <Typography align='center'>Сохранить протокол</Typography>
+            </Button>
+          </MyBox>
         </div>
       </MyForm>
-      <button type='button' onClick={() => dispatch(saveRoutine())}>
-        <Link to={`/routine/${routine_id}`}>save routine</Link>
-      </button>
     </Container>
   )
 }

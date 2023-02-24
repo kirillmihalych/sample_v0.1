@@ -36,7 +36,7 @@ const SingleRoutinePage: FC = () => {
                       paddingRight: '10px',
                     }}
                   >
-                    {exercise.title}
+                    {exercise.title ? exercise.title : 'имя не введено'}
                   </Typography>
                   <Grid container columnSpacing={2}>
                     {/* sets */}
@@ -73,7 +73,7 @@ const SingleRoutinePage: FC = () => {
                           >
                             <Grid item>
                               <Typography align='center'>
-                                {set.weight}
+                                {set.weight ? set.weight : '0'}
                               </Typography>
                             </Grid>
                             <hr />

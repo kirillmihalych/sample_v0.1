@@ -29,7 +29,8 @@ interface IAllRoutines {
 
 interface IRoutine {
   id: string
-  title: string | undefined
+  title: string
+  // title: string | undefined
   exs: IExercise[]
 }
 
@@ -78,7 +79,13 @@ const routineSlice = createSlice({
           routine.exs.push({
             id: short_id,
             title: '',
-            sets: [],
+            sets: [
+              {
+                number: 'initial_id',
+                weight: '0',
+                reps: '0',
+              },
+            ],
           })
         }
         return routine
@@ -108,7 +115,7 @@ const routineSlice = createSlice({
       const { routine_id, title } = action.payload
       state.all_routines.map((routine) => {
         if (routine.id === routine_id) {
-          routine.title = title
+          routine.title = title as string
         }
         return routine
       })
