@@ -1,5 +1,5 @@
-import { FC, useState } from 'react'
-import { Link, Link as RouterLink } from 'react-router-dom'
+import { FC } from 'react'
+import { Link } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import {
   addExercise,
