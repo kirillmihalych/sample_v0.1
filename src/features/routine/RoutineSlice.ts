@@ -1,5 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  IAllRoutines,
+  IRoutine,
+  IExercise,
+  ISet,
+  IAction,
+  IReorderExs,
+} from '../../interfaces'
 
 // convert object to string and store in localStorage
 const saveToLocalStorage = (workouts: IRoutine[]) => {
@@ -21,41 +29,6 @@ export const loadFromLocalStorage = () => {
     console.warn(e)
     return undefined
   }
-}
-
-interface IAllRoutines {
-  all_routines: IRoutine[]
-}
-
-interface IRoutine {
-  id: string
-  title: string
-  // title: string | undefined
-  exs: IExercise[]
-}
-
-export interface IExercise {
-  id: string
-  title: string | undefined
-  sets: ISet[]
-}
-
-interface ISet {
-  number: string
-  weight: string | undefined
-  reps: string | undefined
-}
-
-interface IAction {
-  routine_id: string
-  ex_id?: string
-  title?: string
-  number?: string
-}
-
-interface IReorderExs {
-  id: string | undefined
-  exs: IExercise[]
 }
 
 const initialState: IAllRoutines = {
