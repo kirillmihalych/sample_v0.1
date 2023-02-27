@@ -33,12 +33,13 @@ import {
 const MyGridContainer = styled(Grid)({
   width: '95%',
   maxWidth: 1000,
-  margin: '0 auto',
+  margin: '5rem auto',
 })
 
 const AllRoutinesPage: FC = () => {
   const dispatch = useAppDispatch()
   const { all_routines } = useAppSelector((state) => state.routine)
+  const { drawerOpen } = useAppSelector((state) => state.category)
 
   // MUI logic
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -71,6 +72,7 @@ const AllRoutinesPage: FC = () => {
       direction='row'
       justifyContent='center'
       alignItems='center'
+      sx={drawerOpen ? { margin: '120px', padding: 3 } : null}
     >
       <Grid
         item
