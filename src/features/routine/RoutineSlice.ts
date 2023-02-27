@@ -23,7 +23,9 @@ const saveToLocalStorage = (workouts: IRoutine[]) => {
 export const loadFromLocalStorage = () => {
   try {
     const routine = localStorage.getItem('all_routines')
-    if (routine === null) return undefined
+    if (routine === null) {
+      return [{ id: 'empty_routine', title: 'пустая тренировка', exs: [] }]
+    }
     return JSON.parse(routine)
   } catch (e) {
     console.warn(e)

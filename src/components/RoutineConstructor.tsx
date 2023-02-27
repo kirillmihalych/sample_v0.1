@@ -38,7 +38,8 @@ import {
 } from '@hello-pangea/dnd'
 
 const MyForm = styled('form')({
-  marginTop: '2rem',
+  marginTop: '5rem',
+  marginLeft: '55px',
   border: '1px solid grey',
 })
 
@@ -57,6 +58,7 @@ const MyHorizontalLine = styled('hr')({
 
 const RoutineConstructor: FC = () => {
   const dispatch = useAppDispatch()
+  const { drawerOpen } = useAppSelector((state) => state.category)
   const { all_routines } = useAppSelector((state) => state.routine)
   const newRoutine = all_routines[all_routines.length - 1]
   const { id: routine_id, title, exs } = newRoutine
@@ -79,7 +81,10 @@ const RoutineConstructor: FC = () => {
 
   return (
     <Container>
-      <MyForm onSubmit={submitHandler}>
+      <MyForm
+        onSubmit={submitHandler}
+        sx={drawerOpen ? { marginLeft: '240px' } : null}
+      >
         {/* routine */}
         <TextField
           id='standard-basic'

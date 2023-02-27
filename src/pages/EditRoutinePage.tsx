@@ -38,7 +38,8 @@ import {
 } from '@hello-pangea/dnd'
 
 const MyForm = styled('form')({
-  marginTop: '2rem',
+  marginTop: '5rem',
+  marginLeft: '55px',
   border: '1px solid grey',
 })
 
@@ -58,6 +59,7 @@ const MyBox = styled(Box)({
 const EditRoutinePage: FC = () => {
   const dispatch = useAppDispatch()
   const { all_routines } = useAppSelector((state) => state.routine)
+  const { drawerOpen } = useAppSelector((state) => state.category)
   const { id } = useParams()
 
   const routine = all_routines.find((routine) => routine.id === id)
@@ -82,7 +84,10 @@ const EditRoutinePage: FC = () => {
     <Container>
       {/* routine */}
       {routine ? (
-        <MyForm onSubmit={submitHandler}>
+        <MyForm
+          onSubmit={submitHandler}
+          sx={drawerOpen ? { marginLeft: '240px' } : null}
+        >
           <TextField
             id='standard-basic'
             label='Имя протокола'
