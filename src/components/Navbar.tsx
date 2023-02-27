@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import {
   // AppBar,
@@ -7,10 +7,11 @@ import {
   Typography,
   Button,
   IconButton,
+  TextField,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 // Drawer imports
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
+import { styled, Theme, CSSObject } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import List from '@mui/material/List'
@@ -18,20 +19,19 @@ import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import MenuIcon from '@mui/icons-material/Menu'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 // MUI icons
-import GradeOutlineIcon from '@mui/icons-material/Grade'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined'
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
+import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined'
 import {
-  setDrawerClose,
-  setDrawerOpen,
+  createCategory,
+  toggleDrawer,
 } from '../features/category/CategorySlice'
 
 // drawer logic
@@ -108,33 +108,25 @@ const Drawer = styled(MuiDrawer, {
 // drawer end
 
 const Navbar: FC = () => {
-  const { categories, drawerOpen } = useAppSelector((state) => state.category)
+  const { categories, drawerOpen, categoryCreating } = useAppSelector(
+    (state) => state.category
+  )
   const dispatch = useAppDispatch()
   // drawer logic
-  const theme = useTheme()
-  // const [open, setOpen] = useState(false)
 
-  const handleDrawerOpen = () => {
-    dispatch(setDrawerOpen())
-  }
-
-  const handleDrawerClose = () => {
-    dispatch(setDrawerClose())
+  const handleDrawerToggle = () => {
+    dispatch(toggleDrawer())
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position='fixed' open={drawerOpen}>
+      <AppBar position='fixed' open={false}>
         <Toolbar>
           <IconButton
             color='inherit'
             aria-label='open drawer'
-            onClick={handleDrawerOpen}
+            onClick={handleDrawerToggle}
             edge='start'
-            sx={{
-              marginRight: 5,
-              ...(drawerOpen && { display: 'none' }),
-            }}
           >
             <MenuIcon />
           </IconButton>
@@ -149,29 +141,32 @@ const Navbar: FC = () => {
         </Toolbar>
       </AppBar>
       {/* drawer start */}
-      <Drawer
-        variant='permanent'
-        open={drawerOpen}
-        sx={{ bgcolor: 'transparent' }}
-      >
-        <DrawerHeader
-        // sx={{
-        //   display: 'flex',
-        //   alignItems: 'center',
-        //   justifyContent: 'center',
-        // }}
-        >
-          <Typography>Категории</Typography>
-          <Button onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </Button>
-        </DrawerHeader>
+      <Drawer variant='permanent' open={drawerOpen}>
+        <DrawerHeader />
         <Divider />
         <List>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: drawerOpen ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={() => dispatch(createCategory())}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: drawerOpen ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
+              <AddBoxOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'Создать'}
+              sx={{ opacity: drawerOpen ? 1 : 0 }}
+            />
+          </ListItemButton>
           {categories.map((category, index) => (
             <ListItem
               key={category.title}
@@ -192,9 +187,9 @@ const Navbar: FC = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  {category.title === 'favorite' ? (
+                  {category.id === 'favorite' ? (
                     <StarBorderIcon />
-                  ) : category.title === 'trash' ? (
+                  ) : category.id === 'trash' ? (
                     <DeleteOutlineIcon />
                   ) : (
                     <LabelOutlinedIcon />
@@ -208,7 +203,7 @@ const Navbar: FC = () => {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {/* <Divider /> */}
       </Drawer>
     </Box>
   )
