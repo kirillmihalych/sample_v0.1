@@ -34,7 +34,7 @@ interface IRoutine {
   exs: IExercise[]
 }
 
-interface IExercise {
+export interface IExercise {
   id: string
   title: string | undefined
   sets: ISet[]
@@ -51,6 +51,11 @@ interface IAction {
   ex_id?: string
   title?: string
   number?: string
+}
+
+interface IReorderExs {
+  id: string | undefined
+  exs: IExercise[]
 }
 
 const initialState: IAllRoutines = {
@@ -205,10 +210,18 @@ const routineSlice = createSlice({
     saveRoutine(state) {
       saveToLocalStorage(state.all_routines)
     },
-    reoderRoutines(state, action: PayloadAction<IRoutine[]>) {
-      console.log('i work')
+    reorderRoutines(state, action: PayloadAction<IRoutine[]>) {
       state.all_routines = action.payload
       saveToLocalStorage(state.all_routines)
+    },
+    reorderExs(state, action: PayloadAction<IReorderExs>) {
+      const { id, exs } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          routine.exs = exs
+        }
+        return routine
+      })
     },
   },
 })
@@ -225,7 +238,8 @@ export const {
   removeRoutine,
   removeExercise,
   removeSet,
-  reoderRoutines,
+  reorderRoutines,
+  reorderExs,
 } = routineSlice.actions
 
 export default routineSlice.reducer

@@ -1,10 +1,10 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import {
   addRoutine,
   removeRoutine,
-  reoderRoutines,
+  reorderRoutines,
 } from '../features/routine/RoutineSlice'
 // MUI Imports
 import { Grid, Box } from '@mui/material'
@@ -61,7 +61,7 @@ const AllRoutinesPage: FC = () => {
     const [newOrder] = items.splice(source.index, 1)
     items.splice(destination.index, 0, newOrder)
 
-    dispatch(reoderRoutines(items))
+    dispatch(reorderRoutines(items))
   }
 
   return (
@@ -220,6 +220,7 @@ const AllRoutinesPage: FC = () => {
                   </Draggable>
                 )
               })}
+              {provided.placeholder}
             </Grid>
           )}
         </Droppable>
