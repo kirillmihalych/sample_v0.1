@@ -205,6 +205,11 @@ const routineSlice = createSlice({
     saveRoutine(state) {
       saveToLocalStorage(state.all_routines)
     },
+    reoderRoutines(state, action: PayloadAction<IRoutine[]>) {
+      console.log('i work')
+      state.all_routines = action.payload
+      saveToLocalStorage(state.all_routines)
+    },
   },
 })
 
@@ -220,6 +225,7 @@ export const {
   removeRoutine,
   removeExercise,
   removeSet,
+  reoderRoutines,
 } = routineSlice.actions
 
 export default routineSlice.reducer
