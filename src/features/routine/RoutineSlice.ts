@@ -1,5 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  IAllRoutines,
+  IRoutine,
+  IExercise,
+  ISet,
+  IAction,
+  IReorderExs,
+  IAddCategoryToRoutine,
+} from '../../interfaces'
 
 // convert object to string and store in localStorage
 const saveToLocalStorage = (workouts: IRoutine[]) => {
@@ -15,42 +24,14 @@ const saveToLocalStorage = (workouts: IRoutine[]) => {
 export const loadFromLocalStorage = () => {
   try {
     const routine = localStorage.getItem('all_routines')
-    if (routine === null) return undefined
+    if (routine === null) {
+      return [{ id: 'empty_routine', title: 'пустая тренировка', exs: [] }]
+    }
     return JSON.parse(routine)
   } catch (e) {
     console.warn(e)
     return undefined
   }
-}
-
-interface IAllRoutines {
-  all_routines: IRoutine[]
-}
-
-interface IRoutine {
-  id: string
-  title: string
-  // title: string | undefined
-  exs: IExercise[]
-}
-
-interface IExercise {
-  id: string
-  title: string | undefined
-  sets: ISet[]
-}
-
-interface ISet {
-  number: string
-  weight: string | undefined
-  reps: string | undefined
-}
-
-interface IAction {
-  routine_id: string
-  ex_id?: string
-  title?: string
-  number?: string
 }
 
 const initialState: IAllRoutines = {
@@ -68,6 +49,7 @@ const routineSlice = createSlice({
         id: short_id,
         title: '',
         exs: [],
+        category: [],
       })
     },
     addExercise(state, action: PayloadAction<string>) {
@@ -205,9 +187,41 @@ const routineSlice = createSlice({
     saveRoutine(state) {
       saveToLocalStorage(state.all_routines)
     },
-    reoderRoutines(state, action: PayloadAction<IRoutine[]>) {
-      console.log('i work')
+    reorderRoutines(state, action: PayloadAction<IRoutine[]>) {
       state.all_routines = action.payload
+      saveToLocalStorage(state.all_routines)
+    },
+    reorderExs(state, action: PayloadAction<IReorderExs>) {
+      const { id, exs } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          routine.exs = exs
+        }
+        return routine
+      })
+    },
+    addCategoryToRoutine(state, action: PayloadAction<IAddCategoryToRoutine>) {
+      const { id, title, checkbox } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          const category = routine.category?.find(
+            (category) => category === title
+          )
+
+          // add category
+          if (!category && checkbox) {
+            routine.category?.push(title)
+          }
+
+          // remove category
+          if (!checkbox) {
+            routine.category = routine.category?.filter(
+              (item) => item !== title
+            )
+          }
+        }
+        return routine
+      })
       saveToLocalStorage(state.all_routines)
     },
   },
@@ -225,7 +239,9 @@ export const {
   removeRoutine,
   removeExercise,
   removeSet,
-  reoderRoutines,
+  reorderRoutines,
+  reorderExs,
+  addCategoryToRoutine,
 } = routineSlice.actions
 
 export default routineSlice.reducer

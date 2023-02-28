@@ -1,11 +1,12 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import {
   addRoutine,
   removeRoutine,
-  reoderRoutines,
+  reorderRoutines,
 } from '../features/routine/RoutineSlice'
+import { openAddCategory } from '../features/category/CategorySlice'
 // MUI Imports
 import { Grid, Box } from '@mui/material'
 import { styled } from '@mui/system'
@@ -20,6 +21,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 import Button from '@mui/material/Button'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 // dnd
 import {
   DragDropContext,
@@ -28,17 +30,23 @@ import {
   DropResult,
 } from '@hello-pangea/dnd'
 
+import { BasicModal } from '../components'
+import { AddCategoryModal } from '../components/AddCategoryModal'
+import { EditCategoriesModal } from '../components/EditCategoriesModal'
+
 // test branch
 
 const MyGridContainer = styled(Grid)({
   width: '95%',
+  minWidth: 450,
   maxWidth: 1000,
-  margin: '0 auto',
+  marginTop: '5rem',
 })
 
 const AllRoutinesPage: FC = () => {
   const dispatch = useAppDispatch()
   const { all_routines } = useAppSelector((state) => state.routine)
+  const { drawerOpen } = useAppSelector((state) => state.category)
 
   // MUI logic
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -60,8 +68,7 @@ const AllRoutinesPage: FC = () => {
     const items = Array.from(all_routines)
     const [newOrder] = items.splice(source.index, 1)
     items.splice(destination.index, 0, newOrder)
-
-    dispatch(reoderRoutines(items))
+    dispatch(reorderRoutines(items))
   }
 
   return (
@@ -71,7 +78,10 @@ const AllRoutinesPage: FC = () => {
       direction='row'
       justifyContent='center'
       alignItems='center'
+      sx={drawerOpen ? { marginLeft: '125px' } : null}
     >
+      <EditCategoriesModal />
+      <BasicModal />
       <Grid
         item
         xs={12}
@@ -106,120 +116,179 @@ const AllRoutinesPage: FC = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {all_routines.map((routine: any, index) => {
-                return (
-                  <Draggable
-                    key={routine.id}
-                    draggableId={routine.id}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <Grid
-                        container
-                        direction='row'
-                        justifyContent='space-between'
-                        alignItems='center'
-                        sx={{
-                          border: '1px solid #E1E1E1',
-                          marginTop: '5px',
-                          padding: '0 12px',
-                          borderRadius: '5px',
-                        }}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+              {all_routines
+                ? all_routines.map((routine, index) => {
+                    return (
+                      <Draggable
+                        key={routine.id}
+                        draggableId={routine.id}
+                        index={index}
                       >
-                        <Link
-                          underline='none'
-                          component={RouterLink}
-                          to={`/routine/${routine.id}`}
-                          sx={{ width: 'calc(100% - 45px)' }}
-                        >
-                          <Typography>{routine.title}</Typography>
-                        </Link>
-
-                        {/* menu start */}
-                        <Box>
-                          <IconButton
-                            id='demo-positioned-button'
-                            aria-controls={
-                              open ? 'demo-positioned-menu' : undefined
-                            }
-                            aria-haspopup='true'
-                            aria-expanded={open ? 'true' : undefined}
-                            onClick={(e) => handleClick(e, routine.id)}
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                          <Menu
-                            id='demo-positioned-menu'
-                            aria-labelledby='demo-positioned-button'
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'left',
+                        {(provided) => (
+                          <Grid
+                            container
+                            direction='row'
+                            justifyContent='space-between'
+                            alignItems='center'
+                            sx={{
+                              border: '1px solid #E1E1E1',
+                              marginTop: '5px',
+                              padding: '0 12px',
+                              borderRadius: '5px',
                             }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'left',
-                            }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
                           >
-                            {/* Items */}
-                            {/* change item */}
-                            <MenuItem
-                              onClick={handleClose}
+                            <Link
+                              underline='none'
                               component={RouterLink}
-                              to={`/routine-editing/${routineId}`}
+                              to={`/routine/${routine.id}`}
+                              sx={{ width: 'calc(100% - 45px)' }}
                             >
+                              <Typography>{routine.title}</Typography>
+                            </Link>
+
+                            {/* menu start */}
+                            <Box>
                               <IconButton
-                                sx={{
-                                  '&.MuiButtonBase-root:hover': {
-                                    bgcolor: 'transparent',
-                                  },
-                                }}
-                              >
-                                <EditIcon fontSize='medium' color='primary' />
-                              </IconButton>
-                              <Typography>Изменить</Typography>
-                            </MenuItem>
-                            {/* delete item */}
-                            <MenuItem onClick={handleClose}>
-                              <Box
-                                onClick={() =>
-                                  dispatch(removeRoutine(routineId))
+                                id='demo-positioned-button'
+                                aria-controls={
+                                  open ? 'demo-positioned-menu' : undefined
                                 }
-                                sx={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
+                                aria-haspopup='true'
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={(e) => handleClick(e, routine.id)}
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
+                              <AddCategoryModal id={routine.id} />
+                              <Menu
+                                id='demo-positioned-menu'
+                                aria-labelledby='demo-positioned-button'
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'left',
+                                }}
+                                transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'left',
                                 }}
                               >
-                                <IconButton
-                                  sx={{
-                                    '&.MuiButtonBase-root:hover': {
-                                      bgcolor: 'transparent',
-                                    },
-                                  }}
+                                {/* Items */}
+                                {/* change item */}
+                                <MenuItem
+                                  onClick={handleClose}
+                                  component={RouterLink}
+                                  to={`/routine-editing/${routineId}`}
                                 >
-                                  <DeleteIcon
-                                    fontSize='medium'
-                                    color='primary'
-                                  />
-                                </IconButton>
-                                <Typography>Удалить</Typography>
-                              </Box>
-                            </MenuItem>
-                            {/* End of items */}
-                          </Menu>
-                          {/* menu end */}
-                        </Box>
-                      </Grid>
-                    )}
-                  </Draggable>
-                )
-              })}
+                                  <IconButton
+                                    sx={{
+                                      '&.MuiButtonBase-root:hover': {
+                                        bgcolor: 'transparent',
+                                      },
+                                    }}
+                                  >
+                                    <EditIcon
+                                      fontSize='medium'
+                                      color='primary'
+                                    />
+                                  </IconButton>
+                                  <Typography>Изменить</Typography>
+                                </MenuItem>
+                                {/* delete item */}
+                                <MenuItem onClick={handleClose}>
+                                  <Box
+                                    onClick={() =>
+                                      dispatch(removeRoutine(routineId))
+                                    }
+                                    sx={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignItems: 'center',
+                                    }}
+                                  >
+                                    <IconButton
+                                      sx={{
+                                        '&.MuiButtonBase-root:hover': {
+                                          bgcolor: 'transparent',
+                                        },
+                                      }}
+                                    >
+                                      <DeleteIcon
+                                        fontSize='medium'
+                                        color='primary'
+                                      />
+                                    </IconButton>
+                                    <Typography>Удалить</Typography>
+                                  </Box>
+                                </MenuItem>
+                                {/* End of items */}
+                                {/* //////////// */}
+                                {/* Add category */}
+
+                                <MenuItem onClick={handleClose}>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignItems: 'center',
+                                    }}
+                                    onClick={() => dispatch(openAddCategory())}
+                                  >
+                                    <IconButton
+                                      sx={{
+                                        '&.MuiButtonBase-root:hover': {
+                                          bgcolor: 'transparent',
+                                        },
+                                      }}
+                                    >
+                                      <AddCircleOutlineIcon
+                                        fontSize='medium'
+                                        color='primary'
+                                      />
+                                    </IconButton>
+                                    <Typography>Добавить категорию</Typography>
+                                  </Box>
+                                </MenuItem>
+                                {/* Add category end */}
+                              </Menu>
+                              {/* menu end */}
+                            </Box>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '1rem',
+                              }}
+                            >
+                              {routine.category?.map((category) => {
+                                return (
+                                  <Box
+                                    sx={{
+                                      bgcolor: 'darkgrey',
+                                      padding: '0px 5px',
+                                      borderRadius: '5px',
+                                      marginBottom: '5px',
+                                    }}
+                                    key={category}
+                                  >
+                                    {category}
+                                  </Box>
+                                )
+                              })}
+                            </Box>
+                          </Grid>
+                        )}
+                      </Draggable>
+                    )
+                  })
+                : null}
+              {provided.placeholder}
             </Grid>
           )}
         </Droppable>

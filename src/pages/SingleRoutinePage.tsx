@@ -6,13 +6,21 @@ import { Container, Typography, Grid, Box } from '@mui/material'
 
 const SingleRoutinePage: FC = () => {
   const { all_routines } = useAppSelector((state) => state.routine)
+  const { drawerOpen } = useAppSelector((state) => state.category)
   const { id } = useParams()
 
   const routine = all_routines.find((routine) => routine.id === id)
   return (
     <div>
       {routine ? (
-        <Container fixed sx={{ marginTop: '2rem' }}>
+        <Container
+          fixed
+          sx={
+            drawerOpen
+              ? { marginLeft: '240px', marginTop: '5rem' }
+              : { marginTop: '5rem', marginLeft: '55px' }
+          }
+        >
           <Typography variant='h4'>Протокол</Typography>
           <Typography variant='h4'>«{routine.title}»</Typography>
           {/* exercises */}

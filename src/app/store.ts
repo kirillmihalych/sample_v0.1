@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import routineReducer from '../features/routine/RoutineSlice'
+import categoryReducer from '../features/category/CategorySlice'
 
 export const store = configureStore({
   reducer: {
     routine: routineReducer,
+    category: categoryReducer,
   },
 })
 
