@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ICategory } from '../../interfaces/index'
+import { ICategory, IEditCategory } from '../../interfaces/index'
 
 // convert object to string and store in localStorage
 const saveToLocalStorage = (category: ICategory[]) => {
@@ -37,6 +37,9 @@ interface initialStateTypes {
   drawerOpen: boolean
   categoryCreating: boolean
   showModal: boolean
+  isEditLablesShowed: boolean
+  isEditing: boolean
+  isAddCategoryOpen: boolean
 }
 
 const initialState: initialStateTypes = {
@@ -44,6 +47,9 @@ const initialState: initialStateTypes = {
   drawerOpen: false,
   categoryCreating: false,
   showModal: false,
+  isEditLablesShowed: false,
+  isEditing: false,
+  isAddCategoryOpen: false,
 }
 
 const categorySlice = createSlice({
@@ -74,6 +80,42 @@ const categorySlice = createSlice({
     openModal(state) {
       state.showModal = true
     },
+    openEditLabelList(state) {
+      state.isEditLablesShowed = true
+    },
+    closeEditLabelList(state) {
+      state.isEditLablesShowed = false
+    },
+    removeCategory(state, action: PayloadAction<string>) {
+      const title = action.payload
+
+      state.categories = state.categories.filter(
+        (category) => category.title !== title
+      )
+    },
+    editCategory(state, action: PayloadAction<IEditCategory>) {
+      const { title, name } = action.payload
+
+      state.categories.map((category) => {
+        if (category.title === title) {
+          category.title = name
+        }
+        return category
+      })
+      saveToLocalStorage(state.categories)
+    },
+    closeIsEditing(state) {
+      state.isEditing = false
+    },
+    openIsEditing(state) {
+      state.isEditing = true
+    },
+    openAddCategory(state) {
+      state.isAddCategoryOpen = true
+    },
+    closeAddCategory(state) {
+      state.isAddCategoryOpen = false
+    },
   },
 })
 
@@ -83,6 +125,14 @@ export const {
   addCategory,
   closeModal,
   openModal,
+  openEditLabelList,
+  closeEditLabelList,
+  removeCategory,
+  editCategory,
+  openIsEditing,
+  closeIsEditing,
+  openAddCategory,
+  closeAddCategory,
 } = categorySlice.actions
 
 export default categorySlice.reducer

@@ -28,10 +28,11 @@ import { useAppSelector, useAppDispatch } from '../app/hooks'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined'
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
-import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import {
   createCategory,
   toggleDrawer,
+  openEditLabelList,
 } from '../features/category/CategorySlice'
 
 // drawer logic
@@ -164,6 +165,28 @@ const Navbar: FC = () => {
             </ListItemIcon>
             <ListItemText
               primary={'Создать'}
+              sx={{ opacity: drawerOpen ? 1 : 0 }}
+            />
+          </ListItemButton>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: drawerOpen ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={() => dispatch(openEditLabelList())}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: drawerOpen ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
+              <EditOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'Изменить'}
               sx={{ opacity: drawerOpen ? 1 : 0 }}
             />
           </ListItemButton>

@@ -4,11 +4,7 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import TextField from '@mui/material/TextField'
-import {
-  addCategory,
-  closeModal,
-  openModal,
-} from '../features/category/CategorySlice'
+import { addCategory, closeModal } from '../features/category/CategorySlice'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -51,6 +47,7 @@ export const BasicModal = () => {
             value={tempTitle}
             onChange={(e) => setTempTitle(e.target.value)}
           />
+
           <Box
             sx={{
               display: 'flex',

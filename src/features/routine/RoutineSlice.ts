@@ -7,6 +7,7 @@ import {
   ISet,
   IAction,
   IReorderExs,
+  IAddCategoryToRoutine,
 } from '../../interfaces'
 
 // convert object to string and store in localStorage
@@ -48,6 +49,7 @@ const routineSlice = createSlice({
         id: short_id,
         title: '',
         exs: [],
+        category: [],
       })
     },
     addExercise(state, action: PayloadAction<string>) {
@@ -198,6 +200,30 @@ const routineSlice = createSlice({
         return routine
       })
     },
+    addCategoryToRoutine(state, action: PayloadAction<IAddCategoryToRoutine>) {
+      const { id, title, checkbox } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          const category = routine.category?.find(
+            (category) => category === title
+          )
+
+          // add category
+          if (!category && checkbox) {
+            routine.category?.push(title)
+          }
+
+          // remove category
+          if (!checkbox) {
+            routine.category = routine.category?.filter(
+              (item) => item !== title
+            )
+          }
+        }
+        return routine
+      })
+      saveToLocalStorage(state.all_routines)
+    },
   },
 })
 
@@ -215,6 +241,7 @@ export const {
   removeSet,
   reorderRoutines,
   reorderExs,
+  addCategoryToRoutine,
 } = routineSlice.actions
 
 export default routineSlice.reducer

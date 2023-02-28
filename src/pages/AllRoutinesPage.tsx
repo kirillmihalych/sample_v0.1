@@ -6,6 +6,7 @@ import {
   removeRoutine,
   reorderRoutines,
 } from '../features/routine/RoutineSlice'
+import { openAddCategory } from '../features/category/CategorySlice'
 // MUI Imports
 import { Grid, Box } from '@mui/material'
 import { styled } from '@mui/system'
@@ -20,6 +21,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 import Button from '@mui/material/Button'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 // dnd
 import {
   DragDropContext,
@@ -29,6 +31,8 @@ import {
 } from '@hello-pangea/dnd'
 
 import { BasicModal } from '../components'
+import { AddCategoryModal } from '../components/AddCategoryModal'
+import { EditCategoriesModal } from '../components/EditCategoriesModal'
 
 // test branch
 
@@ -64,7 +68,6 @@ const AllRoutinesPage: FC = () => {
     const items = Array.from(all_routines)
     const [newOrder] = items.splice(source.index, 1)
     items.splice(destination.index, 0, newOrder)
-
     dispatch(reorderRoutines(items))
   }
 
@@ -77,6 +80,7 @@ const AllRoutinesPage: FC = () => {
       alignItems='center'
       sx={drawerOpen ? { marginLeft: '125px' } : null}
     >
+      <EditCategoriesModal />
       <BasicModal />
       <Grid
         item
@@ -113,7 +117,7 @@ const AllRoutinesPage: FC = () => {
               ref={provided.innerRef}
             >
               {all_routines
-                ? all_routines.map((routine: any, index) => {
+                ? all_routines.map((routine, index) => {
                     return (
                       <Draggable
                         key={routine.id}
@@ -158,6 +162,7 @@ const AllRoutinesPage: FC = () => {
                               >
                                 <MoreVertIcon />
                               </IconButton>
+                              <AddCategoryModal id={routine.id} />
                               <Menu
                                 id='demo-positioned-menu'
                                 aria-labelledby='demo-positioned-button'
@@ -222,8 +227,60 @@ const AllRoutinesPage: FC = () => {
                                   </Box>
                                 </MenuItem>
                                 {/* End of items */}
+                                {/* //////////// */}
+                                {/* Add category */}
+
+                                <MenuItem onClick={handleClose}>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignItems: 'center',
+                                    }}
+                                    onClick={() => dispatch(openAddCategory())}
+                                  >
+                                    <IconButton
+                                      sx={{
+                                        '&.MuiButtonBase-root:hover': {
+                                          bgcolor: 'transparent',
+                                        },
+                                      }}
+                                    >
+                                      <AddCircleOutlineIcon
+                                        fontSize='medium'
+                                        color='primary'
+                                      />
+                                    </IconButton>
+                                    <Typography>Добавить категорию</Typography>
+                                  </Box>
+                                </MenuItem>
+                                {/* Add category end */}
                               </Menu>
                               {/* menu end */}
+                            </Box>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '1rem',
+                              }}
+                            >
+                              {routine.category?.map((category) => {
+                                return (
+                                  <Box
+                                    sx={{
+                                      bgcolor: 'darkgrey',
+                                      padding: '0px 5px',
+                                      borderRadius: '5px',
+                                      marginBottom: '5px',
+                                    }}
+                                    key={category}
+                                  >
+                                    {category}
+                                  </Box>
+                                )
+                              })}
                             </Box>
                           </Grid>
                         )}
