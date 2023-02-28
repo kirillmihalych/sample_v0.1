@@ -1,6 +1,7 @@
 // routines interfaces
 export interface IAllRoutines {
   all_routines: IRoutine[]
+  filtered_routines: IRoutine[]
 }
 
 export interface IRoutine {

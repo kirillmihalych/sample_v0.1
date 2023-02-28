@@ -34,6 +34,7 @@ import {
   toggleDrawer,
   openEditLabelList,
 } from '../features/category/CategorySlice'
+import { filterRoutines } from '../features/routine/RoutineSlice'
 
 // drawer logic
 const drawerWidth = 240
@@ -109,9 +110,10 @@ const Drawer = styled(MuiDrawer, {
 // drawer end
 
 const Navbar: FC = () => {
-  const { categories, drawerOpen, categoryCreating } = useAppSelector(
-    (state) => state.category
-  )
+  const { categories, drawerOpen } = useAppSelector((state) => state.category)
+
+  const { all_routines } = useAppSelector((state) => state.routine)
+
   const dispatch = useAppDispatch()
   // drawer logic
 
@@ -190,7 +192,7 @@ const Navbar: FC = () => {
               sx={{ opacity: drawerOpen ? 1 : 0 }}
             />
           </ListItemButton>
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <ListItem
               key={category.title}
               disablePadding
@@ -202,6 +204,7 @@ const Navbar: FC = () => {
                   justifyContent: drawerOpen ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                onClick={() => dispatch(filterRoutines(category.title))}
               >
                 <ListItemIcon
                   sx={{

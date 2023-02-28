@@ -36,6 +36,7 @@ export const loadFromLocalStorage = () => {
 
 const initialState: IAllRoutines = {
   all_routines: loadFromLocalStorage(),
+  filtered_routines: [],
 }
 
 const routineSlice = createSlice({
@@ -224,6 +225,13 @@ const routineSlice = createSlice({
       })
       saveToLocalStorage(state.all_routines)
     },
+    filterRoutines(state, action: PayloadAction<string>) {
+      const title = action.payload
+      state.filtered_routines = state.all_routines.filter((routine) => {
+        const finded = routine.category?.find((category) => category === title)
+        return finded ? routine : null
+      })
+    },
   },
 })
 
@@ -242,6 +250,7 @@ export const {
   reorderRoutines,
   reorderExs,
   addCategoryToRoutine,
+  filterRoutines,
 } = routineSlice.actions
 
 export default routineSlice.reducer
