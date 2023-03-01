@@ -18,11 +18,9 @@ export const loadFromLocalStorage = () => {
     if (routine === null) {
       return [
         {
-          id: 'favorite',
+          id: 'Фавориты',
           title: 'Фавориты',
-          content: [],
         },
-        { id: 'trash', title: 'Мусорка', content: [] },
       ]
     }
     return JSON.parse(routine)
@@ -40,6 +38,7 @@ interface initialStateTypes {
   isEditLablesShowed: boolean
   isEditing: boolean
   isAddCategoryOpen: boolean
+  addRoutineId: string
 }
 
 const initialState: initialStateTypes = {
@@ -50,6 +49,7 @@ const initialState: initialStateTypes = {
   isEditLablesShowed: false,
   isEditing: false,
   isAddCategoryOpen: false,
+  addRoutineId: '',
 }
 
 const categorySlice = createSlice({
@@ -68,7 +68,6 @@ const categorySlice = createSlice({
       const tempCategory = {
         id: action.payload,
         title: action.payload,
-        content: [],
       }
 
       state.categories.push(tempCategory)
@@ -92,6 +91,7 @@ const categorySlice = createSlice({
       state.categories = state.categories.filter(
         (category) => category.title !== title
       )
+      saveToLocalStorage(state.categories)
     },
     editCategory(state, action: PayloadAction<IEditCategory>) {
       const { title, name } = action.payload
@@ -102,6 +102,7 @@ const categorySlice = createSlice({
         }
         return category
       })
+
       saveToLocalStorage(state.categories)
     },
     closeIsEditing(state) {
@@ -110,7 +111,8 @@ const categorySlice = createSlice({
     openIsEditing(state) {
       state.isEditing = true
     },
-    openAddCategory(state) {
+    openAddCategory(state, action: PayloadAction<string>) {
+      state.addRoutineId = action.payload
       state.isAddCategoryOpen = true
     },
     closeAddCategory(state) {

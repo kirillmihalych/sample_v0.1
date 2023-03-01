@@ -16,13 +16,13 @@ import MuiDrawer from '@mui/material/Drawer'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import List from '@mui/material/List'
 import CssBaseline from '@mui/material/CssBaseline'
-import Divider from '@mui/material/Divider'
 import MenuIcon from '@mui/icons-material/Menu'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Divider from '@mui/material/Divider'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 // MUI icons
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
@@ -34,6 +34,7 @@ import {
   toggleDrawer,
   openEditLabelList,
 } from '../features/category/CategorySlice'
+import { filterRoutines } from '../features/routine/RoutineSlice'
 
 // drawer logic
 const drawerWidth = 240
@@ -109,9 +110,10 @@ const Drawer = styled(MuiDrawer, {
 // drawer end
 
 const Navbar: FC = () => {
-  const { categories, drawerOpen, categoryCreating } = useAppSelector(
-    (state) => state.category
-  )
+  const { categories, drawerOpen } = useAppSelector((state) => state.category)
+
+  const { all_routines } = useAppSelector((state) => state.routine)
+
   const dispatch = useAppDispatch()
   // drawer logic
 
@@ -190,11 +192,13 @@ const Navbar: FC = () => {
               sx={{ opacity: drawerOpen ? 1 : 0 }}
             />
           </ListItemButton>
-          {categories.map((category, index) => (
+          <Divider />
+          {categories.map((category) => (
             <ListItem
               key={category.title}
               disablePadding
               sx={{ display: 'block' }}
+              onClick={() => dispatch(filterRoutines(category.id))}
             >
               <ListItemButton
                 sx={{
@@ -210,13 +214,7 @@ const Navbar: FC = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  {category.id === 'favorite' ? (
-                    <StarBorderIcon />
-                  ) : category.id === 'trash' ? (
-                    <DeleteOutlineIcon />
-                  ) : (
-                    <LabelOutlinedIcon />
-                  )}
+                  <LabelOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={category.title}

@@ -18,7 +18,7 @@ const style = {
   p: 4,
 }
 
-export const BasicModal = () => {
+export const CreateCategoryModal: React.FC = () => {
   const dispatch = useAppDispatch()
   const { showModal } = useAppSelector((state) => state.category)
 

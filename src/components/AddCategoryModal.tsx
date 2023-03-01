@@ -10,10 +10,7 @@ import { closeAddCategory } from '../features/category/CategorySlice'
 import { addCategoryToRoutine } from '../features/routine/RoutineSlice'
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation'
 import { styled } from '@mui/material'
-
-interface AddCategoryModalProps {
-  id: string
-}
+import { ICategory } from '../interfaces/index'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -36,19 +33,22 @@ const MyIconButton = styled(IconButton)({
   color: 'black',
 })
 
-export const AddCategoryModal: FC<AddCategoryModalProps> = ({ id }) => {
+export const AddCategoryModal: FC = () => {
   const dispatch = useAppDispatch()
-  const { categories, isAddCategoryOpen } = useAppSelector(
-    (state) => state.category
-  )
+  const {
+    categories,
+    isAddCategoryOpen,
+    addRoutineId: id,
+  } = useAppSelector((state) => state.category)
   const { all_routines } = useAppSelector((state) => state.routine)
-  const categoryTitles = categories.map((category) => category.title)
 
   const checkboxHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
-    title: string
+    categoryId: string
   ) => {
-    dispatch(addCategoryToRoutine({ id, title, checkbox: e.target.checked }))
+    dispatch(
+      addCategoryToRoutine({ id, categoryId, checkbox: e.target.checked })
+    )
   }
 
   const routine = all_routines.find((routine) => routine.id === id)
@@ -67,16 +67,19 @@ export const AddCategoryModal: FC<AddCategoryModalProps> = ({ id }) => {
             <CancelPresentationIcon />
           </MyIconButton>
           <FormGroup>
-            {categoryTitles.map((title: string) => {
+            {categories.map((category: ICategory) => {
+              const { id, title } = category
               return (
                 <FormControlLabel
+                  // изменить поиск айтема по ID,
+                  // после добавления полной категории в рутину
                   checked={
-                    routine?.category?.find((item) => item === title)
+                    routine?.category?.find((item) => item.id === id)
                       ? true
                       : false
                   }
                   control={
-                    <Checkbox onChange={(e) => checkboxHandler(e, title)} />
+                    <Checkbox onChange={(e) => checkboxHandler(e, id)} />
                   }
                   label={title}
                   key={title}

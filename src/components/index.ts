@@ -1,6 +1,13 @@
 import Navbar from './Navbar'
 import CreateExercise from './CreateExercise'
 import RoutineConstructor from './RoutineConstructor'
-import { BasicModal } from './ModalMUI'
+import { CreateCategoryModal } from './CreateCategoryModal'
+import FilteredCategories from './FilteredCategories'
 
-export { Navbar, CreateExercise, RoutineConstructor, BasicModal }
+export {
+  Navbar,
+  CreateExercise,
+  RoutineConstructor,
+  CreateCategoryModal,
+  FilteredCategories,
+}

@@ -36,6 +36,7 @@ export const loadFromLocalStorage = () => {
 
 const initialState: IAllRoutines = {
   all_routines: loadFromLocalStorage(),
+  filtered_routines: [],
 }
 
 const routineSlice = createSlice({
@@ -201,28 +202,36 @@ const routineSlice = createSlice({
       })
     },
     addCategoryToRoutine(state, action: PayloadAction<IAddCategoryToRoutine>) {
-      const { id, title, checkbox } = action.payload
+      const { id, categoryId, checkbox } = action.payload
       state.all_routines.map((routine) => {
         if (routine.id === id) {
           const category = routine.category?.find(
-            (category) => category === title
+            (category) => category.id === categoryId
           )
 
           // add category
           if (!category && checkbox) {
-            routine.category?.push(title)
+            routine.category?.push({ id: categoryId, title: categoryId })
           }
 
           // remove category
           if (!checkbox) {
             routine.category = routine.category?.filter(
-              (item) => item !== title
+              (item) => item.id !== categoryId
             )
           }
         }
         return routine
       })
       saveToLocalStorage(state.all_routines)
+    },
+    filterRoutines(state, action: PayloadAction<string>) {
+      const id = action.payload
+      state.filtered_routines = state.all_routines.filter((routine) => {
+        console.log(id)
+        let finded = routine.category?.find((category) => category.id === id)
+        return finded ? routine : null
+      })
     },
   },
 })
@@ -242,6 +251,7 @@ export const {
   reorderRoutines,
   reorderExs,
   addCategoryToRoutine,
+  filterRoutines,
 } = routineSlice.actions
 
 export default routineSlice.reducer
