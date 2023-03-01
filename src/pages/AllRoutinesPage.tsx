@@ -30,9 +30,10 @@ import {
   DropResult,
 } from '@hello-pangea/dnd'
 
-import { BasicModal } from '../components'
+import { CreateCategoryModal } from '../components'
 import { AddCategoryModal } from '../components/AddCategoryModal'
 import { EditCategoriesModal } from '../components/EditCategoriesModal'
+import FilteredCategories from '../components/FilteredCategories'
 
 // test branch
 
@@ -83,7 +84,7 @@ const AllRoutinesPage: FC = () => {
       sx={drawerOpen ? { marginLeft: '125px' } : null}
     >
       <EditCategoriesModal />
-      <BasicModal />
+      <CreateCategoryModal />
       <Grid
         item
         xs={12}
@@ -151,7 +152,8 @@ const AllRoutinesPage: FC = () => {
                               >
                                 <Typography>{routine.title}</Typography>
                               </Link>
-
+                              {/* modal */}
+                              <AddCategoryModal />
                               {/* menu start */}
                               <Box>
                                 <IconButton
@@ -165,7 +167,7 @@ const AllRoutinesPage: FC = () => {
                                 >
                                   <MoreVertIcon />
                                 </IconButton>
-                                <AddCategoryModal id={routine.id} />
+
                                 <Menu
                                   id='demo-positioned-menu'
                                   aria-labelledby='demo-positioned-button'
@@ -241,7 +243,7 @@ const AllRoutinesPage: FC = () => {
                                         alignItems: 'center',
                                       }}
                                       onClick={() =>
-                                        dispatch(openAddCategory())
+                                        dispatch(openAddCategory(routineId))
                                       }
                                     >
                                       <IconButton
@@ -256,9 +258,7 @@ const AllRoutinesPage: FC = () => {
                                           color='primary'
                                         />
                                       </IconButton>
-                                      <Typography>
-                                        Добавить категорию
-                                      </Typography>
+                                      <Typography>Категории</Typography>
                                     </Box>
                                   </MenuItem>
                                   {/* Add category end */}
@@ -273,21 +273,9 @@ const AllRoutinesPage: FC = () => {
                                   gap: '1rem',
                                 }}
                               >
-                                {routine.category?.map((category) => {
-                                  return (
-                                    <Box
-                                      sx={{
-                                        bgcolor: 'darkgrey',
-                                        padding: '0px 5px',
-                                        borderRadius: '5px',
-                                        marginBottom: '5px',
-                                      }}
-                                      key={category}
-                                    >
-                                      {category}
-                                    </Box>
-                                  )
-                                })}
+                                {/* отображение категорий */}
+                                <FilteredCategories id={routine.id} />
+                                {/* отображение категорий */}
                               </Box>
                             </Grid>
                           )}
@@ -300,7 +288,7 @@ const AllRoutinesPage: FC = () => {
             )}
           </Droppable>
         </DragDropContext>
-      ) : all_routines ? (
+      ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId={'routines'}>
             {(provided) => (
@@ -342,7 +330,8 @@ const AllRoutinesPage: FC = () => {
                               >
                                 <Typography>{routine.title}</Typography>
                               </Link>
-
+                              {/* modal */}
+                              <AddCategoryModal />
                               {/* menu start */}
                               <Box>
                                 <IconButton
@@ -356,7 +345,7 @@ const AllRoutinesPage: FC = () => {
                                 >
                                   <MoreVertIcon />
                                 </IconButton>
-                                <AddCategoryModal id={routine.id} />
+
                                 <Menu
                                   id='demo-positioned-menu'
                                   aria-labelledby='demo-positioned-button'
@@ -432,7 +421,7 @@ const AllRoutinesPage: FC = () => {
                                         alignItems: 'center',
                                       }}
                                       onClick={() =>
-                                        dispatch(openAddCategory())
+                                        dispatch(openAddCategory(routineId))
                                       }
                                     >
                                       <IconButton
@@ -447,9 +436,7 @@ const AllRoutinesPage: FC = () => {
                                           color='primary'
                                         />
                                       </IconButton>
-                                      <Typography>
-                                        Добавить категорию
-                                      </Typography>
+                                      <Typography>Категории</Typography>
                                     </Box>
                                   </MenuItem>
                                   {/* Add category end */}
@@ -464,21 +451,9 @@ const AllRoutinesPage: FC = () => {
                                   gap: '1rem',
                                 }}
                               >
-                                {routine.category?.map((category) => {
-                                  return (
-                                    <Box
-                                      sx={{
-                                        bgcolor: 'darkgrey',
-                                        padding: '0px 5px',
-                                        borderRadius: '5px',
-                                        marginBottom: '5px',
-                                      }}
-                                      key={category}
-                                    >
-                                      {category}
-                                    </Box>
-                                  )
-                                })}
+                                {/* отображение категорий */}
+                                <FilteredCategories id={routine.id} />
+                                {/* отображение категорий */}
                               </Box>
                             </Grid>
                           )}
@@ -491,7 +466,8 @@ const AllRoutinesPage: FC = () => {
             )}
           </Droppable>
         </DragDropContext>
-      ) : null}
+      )}
+
       {/*  */}
     </MyGridContainer>
   )

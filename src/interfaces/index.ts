@@ -8,7 +8,7 @@ export interface IRoutine {
   id: string
   title: string
   exs: IExercise[]
-  category?: string[]
+  category?: ICategory[]
 }
 
 export interface IExercise {
@@ -32,7 +32,7 @@ export interface IAction {
 
 export interface IAddCategoryToRoutine {
   id: string
-  title: string
+  categoryId: string
   checkbox: boolean
 }
 
@@ -46,7 +46,6 @@ export interface IReorderExs {
 export interface ICategory {
   id: string
   title: string
-  content: IRoutine[]
 }
 
 export interface IEditCategory {
