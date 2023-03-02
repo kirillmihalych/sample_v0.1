@@ -41,6 +41,7 @@ export const AddCategoryModal: FC = () => {
     addRoutineId: id,
   } = useAppSelector((state) => state.category)
   const { all_routines } = useAppSelector((state) => state.routine)
+  const routine = all_routines.find((routine) => routine.id === id)
 
   const checkboxHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -51,7 +52,6 @@ export const AddCategoryModal: FC = () => {
     )
   }
 
-  const routine = all_routines.find((routine) => routine.id === id)
   const handleClose = () => dispatch(closeAddCategory())
 
   return (
@@ -71,8 +71,6 @@ export const AddCategoryModal: FC = () => {
               const { id, title } = category
               return (
                 <FormControlLabel
-                  // изменить поиск айтема по ID,
-                  // после добавления полной категории в рутину
                   checked={
                     routine?.category?.find((item) => item.id === id)
                       ? true

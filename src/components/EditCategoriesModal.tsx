@@ -50,12 +50,10 @@ const style = {
 
 export const EditCategoriesModal: FC = () => {
   const dispatch = useAppDispatch()
-
   const { categories, isEditing, isEditLablesShowed } = useAppSelector(
     (state) => state.category
   )
   const categoryTitles = categories.map((category) => category.title)
-
   const handleClose = () => dispatch(closeEditLabelList())
 
   return (
@@ -68,7 +66,7 @@ export const EditCategoriesModal: FC = () => {
       >
         <Box sx={style}>
           <Typography
-            sx={{ mt: 4, mb: 2 }}
+            sx={{ mt: 2, mb: 3 }}
             variant='h6'
             component='div'
             align='center'
@@ -121,7 +119,6 @@ export const EditCategoriesModal: FC = () => {
                       <LabelOutlinedIcon />
                     </Avatar>
                   </ListItemAvatar>
-
                   {!isEditing ? (
                     <ListItemText primary={title} />
                   ) : (

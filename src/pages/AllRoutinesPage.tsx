@@ -234,7 +234,6 @@ const AllRoutinesPage: FC = () => {
                                   {/* End of items */}
                                   {/* //////////// */}
                                   {/* Add category */}
-
                                   <MenuItem onClick={handleClose}>
                                     <Box
                                       sx={{

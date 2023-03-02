@@ -52,3 +52,10 @@ export interface IEditCategory {
   title: string
   name: string
 }
+
+// user
+
+export interface IUser {
+  email: FormDataEntryValue | null
+  password: FormDataEntryValue | null
+}

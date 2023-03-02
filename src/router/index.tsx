@@ -1,3 +1,4 @@
+import { SignIn, SignUp } from '../components'
 import { CreateRoutinePage, AllRoutinesPage, EditRoutinePage } from '../pages'
 import SingleRoutinePage from '../pages/SingleRoutinePage'
 
@@ -8,6 +9,8 @@ export interface IRoute {
 
 export enum RouteNames {
   HOME = '/',
+  SIGN_IN = '/sign-in',
+  SIGN_UP = '/sign-in/sign-up',
   CREATE_ROUTINE = '/create-routine',
   EDIT_ROUTINE = '/routine-editing/:id',
   SINGLE_ROUTINE = `/routine/:id`,
@@ -18,4 +21,9 @@ export const routes: IRoute[] = [
   { path: RouteNames.HOME, element: <AllRoutinesPage /> },
   { path: RouteNames.SINGLE_ROUTINE, element: <SingleRoutinePage /> },
   { path: RouteNames.EDIT_ROUTINE, element: <EditRoutinePage /> },
+]
+
+export const loginPageRoutes: IRoute[] = [
+  { path: RouteNames.SIGN_IN, element: <SignIn /> },
+  { path: RouteNames.SIGN_UP, element: <SignUp /> },
 ]

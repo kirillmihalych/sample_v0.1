@@ -3,6 +3,8 @@ import CreateExercise from './CreateExercise'
 import RoutineConstructor from './RoutineConstructor'
 import { CreateCategoryModal } from './CreateCategoryModal'
 import FilteredCategories from './FilteredCategories'
+import SignIn from './SignIn'
+import SignUp from './SignUp'
 
 export {
   Navbar,
@@ -10,4 +12,6 @@ export {
   RoutineConstructor,
   CreateCategoryModal,
   FilteredCategories,
+  SignIn,
+  SignUp,
 }
