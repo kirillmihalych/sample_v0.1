@@ -7,7 +7,6 @@ import {
   Typography,
   Button,
   IconButton,
-  TextField,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 // Drawer imports
@@ -17,7 +16,6 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import List from '@mui/material/List'
 import CssBaseline from '@mui/material/CssBaseline'
 import MenuIcon from '@mui/icons-material/Menu'
-import StarBorderIcon from '@mui/icons-material/StarBorder'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -25,7 +23,6 @@ import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 // MUI icons
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined'
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
@@ -110,13 +107,10 @@ const Drawer = styled(MuiDrawer, {
 // drawer end
 
 const Navbar: FC = () => {
+  const dispatch = useAppDispatch()
   const { categories, drawerOpen } = useAppSelector((state) => state.category)
 
-  const { all_routines } = useAppSelector((state) => state.routine)
-
-  const dispatch = useAppDispatch()
   // drawer logic
-
   const handleDrawerToggle = () => {
     dispatch(toggleDrawer())
   }

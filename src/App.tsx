@@ -1,16 +1,31 @@
 import { FC } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Navbar } from './components/index'
+import { useAppSelector } from './app/hooks'
+import { Navbar, SignIn, SignUp } from './components/index'
 import AppRouter from './router/AppRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import { colorTheme } from './theme'
 
 const App: FC = () => {
+  const { isUserSignedIn, isUserSignedUp } = useAppSelector(
+    (state) => state.user
+  )
+
   return (
     <ThemeProvider theme={colorTheme}>
       <BrowserRouter>
-        <Navbar />
-        <AppRouter />
+        {/* <Navbar />
+        <AppRouter /> */}
+        {isUserSignedIn ? (
+          <>
+            <Navbar />
+            <AppRouter />
+          </>
+        ) : (
+          <>
+            <AppRouter />
+          </>
+        )}
       </BrowserRouter>
     </ThemeProvider>
   )

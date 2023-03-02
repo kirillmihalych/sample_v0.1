@@ -208,12 +208,10 @@ const routineSlice = createSlice({
           const category = routine.category?.find(
             (category) => category.id === categoryId
           )
-
           // add category
           if (!category && checkbox) {
             routine.category?.push({ id: categoryId, title: categoryId })
           }
-
           // remove category
           if (!checkbox) {
             routine.category = routine.category?.filter(

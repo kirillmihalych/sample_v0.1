@@ -2,7 +2,6 @@ import { FC, useState } from 'react'
 
 const CreateExercise: FC = () => {
   const [title, setTitle] = useState<string>('')
-  const [weight, setWeight] = useState<string>('')
   const [reps, setReps] = useState<string>('')
 
   const titleChanger = (e: React.ChangeEvent<HTMLInputElement>) => {
