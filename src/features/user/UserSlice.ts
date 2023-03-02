@@ -52,6 +52,7 @@ const userSlice = createSlice({
     },
     setUser(state, action: PayloadAction<IUser>) {
       state.user = action.payload
+      saveToLocalStorage(action.payload)
     },
   },
 })

@@ -1,12 +1,14 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   // AppBar,
   Box,
   Toolbar,
-  Typography,
   Button,
   IconButton,
+  Typography,
+  Menu,
+  MenuItem,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 // Drawer imports
@@ -32,6 +34,8 @@ import {
   openEditLabelList,
 } from '../features/category/CategorySlice'
 import { filterRoutines } from '../features/routine/RoutineSlice'
+import { AccountCircle } from '@mui/icons-material'
+import { openSignInMode } from '../features/user/UserSlice'
 
 // drawer logic
 const drawerWidth = 240
@@ -109,10 +113,21 @@ const Drawer = styled(MuiDrawer, {
 const Navbar: FC = () => {
   const dispatch = useAppDispatch()
   const { categories, drawerOpen } = useAppSelector((state) => state.category)
+  const { user } = useAppSelector((state) => state.user)
 
   // drawer logic
   const handleDrawerToggle = () => {
     dispatch(toggleDrawer())
+  }
+
+  // login logic
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -134,7 +149,39 @@ const Navbar: FC = () => {
               </IconButton>
             </Link>
           </Typography>
-          <Button color='inherit'>Войти</Button>
+          <Typography>Добро пожаловать, {user.name}!</Typography>
+          <div>
+            <IconButton
+              size='large'
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              onClick={handleMenu}
+              color='inherit'
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id='menu-appbar'
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Профиль</MenuItem>
+              <MenuItem onClick={() => dispatch(openSignInMode())}>
+                Выйти
+              </MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       {/* drawer start */}
