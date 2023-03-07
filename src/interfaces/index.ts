@@ -56,6 +56,7 @@ export interface IEditCategory {
 // user
 
 export interface IUser {
-  email: FormDataEntryValue | null
-  password: FormDataEntryValue | null
+  name: string
+  email: string
+  password: string
 }

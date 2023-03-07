@@ -12,8 +12,8 @@ import Container from '@mui/material/Container'
 // router
 import { Link as RouterLink } from 'react-router-dom'
 // redux
-import { useAppDispatch } from '../app/hooks'
-import { setUser, closeSignInMode } from '../features/user/UserSlice'
+import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { closeSignInMode } from '../features/user/UserSlice'
 
 function Copyright(props: any) {
   return (
@@ -35,17 +35,29 @@ function Copyright(props: any) {
 
 export default function SignIn() {
   const dispatch = useAppDispatch()
+  const { user } = useAppSelector((state) => state.user)
+  const [errorEmail, setErrorEmail] = React.useState<boolean>(false)
+  const [errorPassword, setErrorPassword] = React.useState<boolean>(false)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    dispatch(closeSignInMode())
-    dispatch(
-      setUser({
-        email: data.get('email'),
-        password: data.get('password'),
-      })
-    )
+    const email = data.get('email') as string
+    const password = data.get('password') as string
+
+    setErrorPassword(false)
+    setErrorEmail(false)
+
+    if (user.password !== password) {
+      setErrorPassword(true)
+    }
+    if (user.email !== email) {
+      setErrorEmail(true)
+    }
+
+    if (user.password === password && user.email === email) {
+      dispatch(closeSignInMode())
+    }
   }
 
   return (
@@ -64,14 +76,14 @@ export default function SignIn() {
         </Typography>
         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
-            margin='normal'
             required
             fullWidth
             id='email'
             label='Email'
             name='email'
             autoComplete='email'
-            autoFocus
+            error={errorEmail}
+            helperText={errorEmail ? 'Неверный email' : null}
           />
           <TextField
             margin='normal'
@@ -82,6 +94,8 @@ export default function SignIn() {
             type='password'
             id='password'
             autoComplete='current-password'
+            error={errorPassword}
+            helperText={errorPassword ? 'Неверный пароль' : null}
           />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
@@ -94,6 +108,16 @@ export default function SignIn() {
             sx={{ mt: 3, mb: 2 }}
           >
             Войти
+          </Button>
+          <Button
+            color='secondary'
+            type='submit'
+            fullWidth
+            variant='contained'
+            sx={{ mt: 1, mb: 2 }}
+            onClick={() => dispatch(closeSignInMode())}
+          >
+            Продолжить без регистрации
           </Button>
           <Grid container>
             <Grid item xs>

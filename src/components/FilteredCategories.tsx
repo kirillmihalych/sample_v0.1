@@ -44,6 +44,7 @@ const FilteredCategories: FC<IFilteredCategoriesProps> = ({ id }) => {
                 elevation={0}
                 variant='outlined'
                 sx={{
+                  fontSize: '15px',
                   padding: '0px 10px',
                   borderRadius: '5px',
                   marginBottom: '5px',

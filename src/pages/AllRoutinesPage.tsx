@@ -95,7 +95,8 @@ const AllRoutinesPage: FC = () => {
         }}
       >
         <Button
-          variant='outlined'
+          variant='contained'
+          color='secondary'
           sx={{
             width: '75%',
           }}
@@ -103,7 +104,7 @@ const AllRoutinesPage: FC = () => {
           to={'/create-routine'}
           onClick={() => dispatch(addRoutine())}
         >
-          <Typography>Создать</Typography>
+          <Typography>Новая тренировка</Typography>
           <IconButton>
             <AddBoxIcon fontSize='large' color='primary' />
           </IconButton>
@@ -135,10 +136,12 @@ const AllRoutinesPage: FC = () => {
                               justifyContent='space-between'
                               alignItems='center'
                               sx={{
-                                border: '1px solid #E1E1E1',
+                                border: '2px solid #E1E1E1',
                                 marginTop: '5px',
                                 padding: '0 12px',
                                 borderRadius: '5px',
+                                bgcolor: 'white',
+                                minHeight: '100px',
                               }}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
@@ -312,10 +315,12 @@ const AllRoutinesPage: FC = () => {
                               justifyContent='space-between'
                               alignItems='center'
                               sx={{
-                                border: '1px solid #E1E1E1',
+                                border: '2px solid #E1E1E1',
                                 marginTop: '5px',
                                 padding: '0 12px',
                                 borderRadius: '5px',
+                                bgcolor: 'white',
+                                minHeight: '100px',
                               }}
                               ref={provided.innerRef}
                               {...provided.draggableProps}

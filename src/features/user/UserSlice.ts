@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../../interfaces/index'
 
 // convert object to string and store in localStorage
@@ -46,12 +46,14 @@ const userSlice = createSlice({
   reducers: {
     openSignInMode(state) {
       state.isUserSignedIn = false
+      localStorage.removeItem('user')
     },
     closeSignInMode(state) {
       state.isUserSignedIn = true
     },
     setUser(state, action: PayloadAction<IUser>) {
       state.user = action.payload
+      saveToLocalStorage(action.payload)
     },
   },
 })
