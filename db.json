@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "User 1",
+      "email": "user1@example.com",
+      "password": "qwerty"
+    },
+    {
+      "id": 2,
+      "name": "User 2",
+      "email": "user2@example.com",
+      "password": "qwerty2"
+    },
+    {
+      "name": "JohNyBeGood",
+      "email": "ru@ru.ru",
+      "password": "Qwe12#",
+      "id": 3
+    },
+    {
+      "name": "BebBe",
+      "email": "qwe@qwe.ru",
+      "password": "Qwe12#",
+      "id": 4
+    },
+    {
+      "name": "MyName",
+      "email": "myname@gmail.com",
+      "password": "Qwe!23",
+      "id": 5
+    },
+    {
+      "name": "Boy",
+      "email": "fac@mail.ru",
+      "password": "Qwe12#",
+      "id": 6
+    }
+  ]
+}

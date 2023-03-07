@@ -13,7 +13,7 @@ import Container from '@mui/material/Container'
 import { Link as RouterLink } from 'react-router-dom'
 // redux
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { setUser, closeSignInMode } from '../features/user/UserSlice'
+import { closeSignInMode } from '../features/user/UserSlice'
 
 function Copyright(props: any) {
   return (
@@ -108,6 +108,16 @@ export default function SignIn() {
             sx={{ mt: 3, mb: 2 }}
           >
             Войти
+          </Button>
+          <Button
+            color='secondary'
+            type='submit'
+            fullWidth
+            variant='contained'
+            sx={{ mt: 1, mb: 2 }}
+            onClick={() => dispatch(closeSignInMode())}
+          >
+            Продолжить без регистрации
           </Button>
           <Grid container>
             <Grid item xs>

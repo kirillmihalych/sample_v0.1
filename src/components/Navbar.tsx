@@ -4,7 +4,6 @@ import {
   // AppBar,
   Box,
   Toolbar,
-  Button,
   IconButton,
   Typography,
   Menu,
@@ -149,7 +148,9 @@ const Navbar: FC = () => {
               </IconButton>
             </Link>
           </Typography>
-          <Typography>Добро пожаловать, {user.name}!</Typography>
+          <Typography>
+            Добро пожаловать, {user.name ? user.name : 'Гость'}!
+          </Typography>
           <div>
             <IconButton
               size='large'

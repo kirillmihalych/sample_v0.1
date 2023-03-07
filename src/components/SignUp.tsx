@@ -79,11 +79,6 @@ export default function SignUp() {
     }
 
     dispatch(setUser({ name, email, password }))
-    console.log({
-      name,
-      email,
-      password,
-    })
   }
 
   return (
