@@ -67,6 +67,7 @@ const routineSlice = createSlice({
                 number: 'initial_id',
                 weight: '0',
                 reps: '0',
+                isDone: false,
               },
             ],
           })
@@ -86,6 +87,7 @@ const routineSlice = createSlice({
                 number: short_id,
                 weight: '0',
                 reps: '0',
+                isDone: false,
               })
             }
             return ex
@@ -231,6 +233,40 @@ const routineSlice = createSlice({
         return finded ? routine : null
       })
     },
+    setIsDone(state, action: PayloadAction<IAction>) {
+      const { routine_id, ex_id, number } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs.map((ex: IExercise) => {
+            if (ex.id === ex_id) {
+              ex.sets = ex.sets.map((set: ISet) => {
+                if (number === set.number) {
+                  set.isDone = !set.isDone
+                }
+                return set
+              })
+            }
+            return ex
+          })
+        }
+        return routine
+      })
+    },
+    setIsUndone(state, action: PayloadAction<string>) {
+      const routine_id = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs.map((ex: IExercise) => {
+            ex.sets = ex.sets.map((set: ISet) => {
+              set.isDone = false
+              return set
+            })
+            return ex
+          })
+        }
+        return routine
+      })
+    },
   },
 })
 
@@ -250,6 +286,8 @@ export const {
   reorderExs,
   addCategoryToRoutine,
   filterRoutines,
+  setIsDone,
+  setIsUndone,
 } = routineSlice.actions
 
 export default routineSlice.reducer

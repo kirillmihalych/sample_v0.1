@@ -320,7 +320,7 @@ const AllRoutinesPage: FC = () => {
                                 padding: '0 12px',
                                 borderRadius: '5px',
                                 bgcolor: 'white',
-                                minHeight: '100px',
+                                minHeight: '125px',
                               }}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
@@ -459,6 +459,13 @@ const AllRoutinesPage: FC = () => {
                                 <FilteredCategories id={routine.id} />
                                 {/* отображение категорий */}
                               </Box>
+                              <Button
+                                variant='contained'
+                                component={RouterLink}
+                                to={`/current_routine/${routine.id}`}
+                              >
+                                Старт
+                              </Button>
                             </Grid>
                           )}
                         </Draggable>
