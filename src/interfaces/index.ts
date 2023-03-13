@@ -9,6 +9,7 @@ export interface IRoutine {
   title: string
   exs: IExercise[]
   category?: ICategory[]
+  time?: number
 }
 
 export interface IExercise {
@@ -21,6 +22,7 @@ export interface ISet {
   number: string
   weight: string | undefined
   reps: string | undefined
+  isDone: boolean
 }
 
 export interface IAction {
