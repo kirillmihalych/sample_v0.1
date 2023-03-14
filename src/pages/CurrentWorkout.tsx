@@ -43,7 +43,9 @@ import {
   setRoutineName,
 } from '../features/routine/RoutineSlice'
 import { saveFinishedWorkout } from '../features/history/HistorySlice'
-import { IRoutine } from '../interfaces'
+import { IAction, IRoutine } from '../interfaces'
+import { RestTimer, SelectRestTimer } from '../components'
+import Paper from '@mui/material/Paper'
 
 const MyForm = styled('form')({
   marginTop: '5rem',
@@ -71,8 +73,27 @@ const CurrentWorkout: FC = () => {
   const { id } = useParams()
   const { all_routines } = useAppSelector((state) => state.routine)
   const { drawerOpen } = useAppSelector((state) => state.category)
+  const [timeIsOver, setTimeIsOver] = useState(false)
   // timer
-  const { time, start, pause, reset, status } = useTimer()
+  const { time } = useTimer({
+    autostart: true,
+  })
+  // rest timer
+  const {
+    time: restTimer,
+    start: startRestTimer,
+    advanceTime,
+    reset,
+  } = useTimer({
+    initialTime: Number(0),
+    timerType: 'DECREMENTAL',
+    endTime: Number(0),
+    onTimeOver: () => {
+      setTimeout(function () {
+        setTimeIsOver(true)
+      }, 1000)
+    },
+  })
 
   const routine = all_routines.find((routine) => routine.id === id)
 
@@ -85,6 +106,27 @@ const CurrentWorkout: FC = () => {
     navigate('/')
     dispatch(setIsUndone(routine.id))
   }
+
+  const handleIsDone = (load: IAction) => {
+    const { routine_id, ex_id, number } = load
+    const routine = all_routines.find((routine) => routine.id === routine_id)
+    const ex = routine?.exs.find((ex) => ex.id === ex_id)
+
+    dispatch(
+      setIsDone({
+        routine_id,
+        ex_id,
+        number,
+      })
+    )
+    setTimeIsOver(false)
+    reset()
+    const num = Number(ex?.restTimer)
+    startRestTimer()
+    advanceTime(-num)
+  }
+  let minutes = Math.ceil(restTimer / 60)
+  let seconds = restTimer % 60
 
   // drag and drop
   const onDragEnd = (result: DropResult) => {
@@ -99,10 +141,6 @@ const CurrentWorkout: FC = () => {
   }
 
   useEffect(() => {
-    start()
-  }, [routine])
-
-  useEffect(() => {
     dispatch(setIsUndone(id as string))
   }, [location])
 
@@ -111,7 +149,7 @@ const CurrentWorkout: FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItem: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
         rowGap: '1rem',
         margin: '5rem 5rem',
@@ -137,37 +175,47 @@ const CurrentWorkout: FC = () => {
       <Box>
         {time > 60 ? (
           <Typography>
-            Время: {Math.round(time / 60)} минут {time % 60} сек
+            Длительность: {Math.round(time / 60)} минут {time % 60} сек
           </Typography>
         ) : time > 3600 ? (
           <Typography>
-            Время: {Math.round(time / 3600)} часов {Math.round(time / 60)} минут
+            Длительность: {Math.round(time / 3600)} часов{' '}
+            {Math.round(time / 60)} минут
           </Typography>
         ) : (
-          <Typography>Время: {time} сек</Typography>
+          <Typography>Длительность: {time} сек</Typography>
         )}
       </Box>
-      <Divider />
+      {/* set timer */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '1rem',
+        }}
+      >
+        <Paper sx={{ fontSize: '3rem', padding: '0 1rem' }}>
+          {restTimer >= 60 && minutes > 9
+            ? minutes
+            : restTimer >= 60 && minutes < 10
+            ? `0${minutes}`
+            : `00`}
+        </Paper>
+        :
+        <Paper sx={{ fontSize: '3rem', padding: '0 1rem' }}>
+          {seconds > 9
+            ? seconds
+            : timeIsOver || isNaN(restTimer)
+            ? `00`
+            : `0${seconds}`}
+        </Paper>
+      </Box>
+      <Typography variant='h5'>Время отдыха</Typography>
       {/* routine constructor box */}
       {/* exercises */}
       {routine ? (
         <MyForm onSubmit={submitHandler}>
-          {/* <TextField
-            id='standard-basic'
-            label='Имя протокола'
-            variant='filled'
-            value={routine.title}
-            onChange={(e) =>
-              dispatch(
-                setRoutineName({
-                  routine_id: routine.id,
-                  title: e.target.value,
-                })
-              )
-            }
-            fullWidth
-            required
-          /> */}
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId='exs'>
               {(provided) => (
@@ -232,7 +280,11 @@ const CurrentWorkout: FC = () => {
                                 </Button>
                               </Grid>
                             </Grid>
-
+                            {/* rest */}
+                            <SelectRestTimer
+                              ex_id={ex_id}
+                              routine_id={routine.id}
+                            />
                             {/* set */}
                             {/* sets */}
                             <Grid container>
@@ -343,13 +395,11 @@ const CurrentWorkout: FC = () => {
                                     >
                                       <IconButton
                                         onClick={() =>
-                                          dispatch(
-                                            setIsDone({
-                                              routine_id: routine.id,
-                                              ex_id,
-                                              number: set.number,
-                                            })
-                                          )
+                                          handleIsDone({
+                                            routine_id: routine.id,
+                                            ex_id,
+                                            number: set.number,
+                                          })
                                         }
                                       >
                                         <DoneOutlineIcon />
@@ -414,9 +464,6 @@ const CurrentWorkout: FC = () => {
           </MyBox>
           <MyBox>
             <Button
-              // disabled={title ? false : true}
-              // component={Link}
-              // to={`/routine/${routine.id}`}
               variant='contained'
               color='secondary'
               fullWidth

@@ -3,6 +3,7 @@ import routineReducer from '../features/routine/RoutineSlice'
 import categoryReducer from '../features/category/CategorySlice'
 import userReducer from '../features/user/UserSlice'
 import historyReducer from '../features/history/HistorySlice'
+import eventReducer from '../features/event/EventSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     category: categoryReducer,
     user: userReducer,
     history: historyReducer,
+    event: eventReducer,
   },
 })
 
