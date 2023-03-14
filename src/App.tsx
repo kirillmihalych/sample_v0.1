@@ -5,6 +5,7 @@ import { Navbar, SignIn, SignUp } from './components/index'
 import AppRouter from './router/AppRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import { colorTheme } from './theme'
+import { WelcomePage } from './pages'
 
 const App: FC = () => {
   const { isUserSignedIn, isUserSignedUp } = useAppSelector(
@@ -23,7 +24,7 @@ const App: FC = () => {
           </>
         ) : (
           <>
-            <AppRouter />
+            <WelcomePage />
           </>
         )}
       </BrowserRouter>

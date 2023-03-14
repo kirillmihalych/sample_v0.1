@@ -9,6 +9,8 @@ import {
   IReorderExs,
   IAddCategoryToRoutine,
 } from '../../interfaces'
+// timer
+import { useTimer } from 'use-timer'
 
 // convert object to string and store in localStorage
 const saveToLocalStorage = (workouts: IRoutine[]) => {
@@ -246,6 +248,9 @@ const routineSlice = createSlice({
                 return set
               })
             }
+            // if(ex.restTimer){
+
+            // }
             return ex
           })
         }
@@ -261,6 +266,20 @@ const routineSlice = createSlice({
               set.isDone = false
               return set
             })
+            return ex
+          })
+        }
+        return routine
+      })
+    },
+    setRestTimer(state, action: PayloadAction<IAction>) {
+      const { routine_id, ex_id, num } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs.map((ex: IExercise) => {
+            if (ex.id === ex_id) {
+              ex.restTimer = num
+            }
             return ex
           })
         }
@@ -288,6 +307,7 @@ export const {
   filterRoutines,
   setIsDone,
   setIsUndone,
+  setRestTimer,
 } = routineSlice.actions
 
 export default routineSlice.reducer

@@ -16,6 +16,8 @@ export interface IExercise {
   id: string
   title: string | undefined
   sets: ISet[]
+  timer_trigger?: boolean
+  restTimer?: string
 }
 
 export interface ISet {
@@ -30,6 +32,7 @@ export interface IAction {
   ex_id?: string
   title?: string
   number?: string
+  num?: string
 }
 
 export interface IAddCategoryToRoutine {

@@ -55,9 +55,13 @@ const userSlice = createSlice({
       state.user = action.payload
       saveToLocalStorage(action.payload)
     },
+    moveToMainPage(state) {
+      state.isUserSignedIn = true
+    },
   },
 })
 
-export const { openSignInMode, closeSignInMode, setUser } = userSlice.actions
+export const { openSignInMode, closeSignInMode, setUser, moveToMainPage } =
+  userSlice.actions
 
 export default userSlice.reducer

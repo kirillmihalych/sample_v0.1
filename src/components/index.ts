@@ -5,6 +5,8 @@ import { CreateCategoryModal } from './CreateCategoryModal'
 import FilteredCategories from './FilteredCategories'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
+import SelectRestTimer from './SelectRestTimer'
+import RestTimer from './RestTimer'
 
 export {
   Navbar,
@@ -14,4 +16,6 @@ export {
   FilteredCategories,
   SignIn,
   SignUp,
+  SelectRestTimer,
+  RestTimer,
 }
