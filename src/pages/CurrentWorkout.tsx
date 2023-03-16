@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { useTimer } from 'use-timer'
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 // MUI imports
 import {
@@ -34,17 +34,15 @@ import {
   removeExercise,
   removeSet,
   reorderExs,
-  saveRoutine,
   setExerciseName,
   setExerciseReps,
   setExerciseWeight,
   setIsDone,
   setIsUndone,
-  setRoutineName,
 } from '../features/routine/RoutineSlice'
 import { saveFinishedWorkout } from '../features/history/HistorySlice'
 import { IAction, IRoutine } from '../interfaces'
-import { RestTimer, SelectRestTimer } from '../components'
+import { SelectRestTimer } from '../components'
 import Paper from '@mui/material/Paper'
 
 const MyForm = styled('form')({
@@ -142,6 +140,7 @@ const CurrentWorkout: FC = () => {
 
   useEffect(() => {
     dispatch(setIsUndone(id as string))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
   return (
@@ -154,6 +153,7 @@ const CurrentWorkout: FC = () => {
         rowGap: '1rem',
         margin: '5rem 5rem',
         marginLeft: drawerOpen ? 'calc(240px + 5rem)' : null,
+        maxWidth: '900px',
       }}
     >
       {/* header box*/}

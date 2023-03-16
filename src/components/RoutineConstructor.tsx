@@ -13,6 +13,7 @@ import {
   removeSet,
   reorderExs,
 } from '../features/routine/RoutineSlice'
+import { SelectRestTimer } from '../components'
 // MUI imports
 import {
   Container,
@@ -158,7 +159,11 @@ const RoutineConstructor: FC = () => {
                               </Button>
                             </Grid>
                           </Grid>
-
+                          {/* timer */}
+                          <SelectRestTimer
+                            ex_id={ex_id}
+                            routine_id={routine_id}
+                          />
                           {/* sets */}
                           <Grid container>
                             {/* подходы */}

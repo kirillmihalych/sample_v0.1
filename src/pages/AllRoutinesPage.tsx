@@ -29,10 +29,7 @@ import {
   Draggable,
   DropResult,
 } from '@hello-pangea/dnd'
-
-import { CreateCategoryModal } from '../components'
 import { AddCategoryModal } from '../components/AddCategoryModal'
-import { EditCategoriesModal } from '../components/EditCategoriesModal'
 import FilteredCategories from '../components/FilteredCategories'
 
 // test branch
@@ -83,8 +80,6 @@ const AllRoutinesPage: FC = () => {
       alignItems='center'
       sx={drawerOpen ? { marginLeft: '125px' } : null}
     >
-      <EditCategoriesModal />
-      <CreateCategoryModal />
       <Grid
         item
         xs={12}

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { useTimer } from 'use-timer'
 // redux imports
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { setRestTimer } from '../features/routine/RoutineSlice'
@@ -11,7 +10,6 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 // MUI icons
 import TimelapseIcon from '@mui/icons-material/Timelapse'
-import { Typography } from '@mui/material'
 
 interface IRestTimerProps {
   ex_id: string
@@ -20,10 +18,13 @@ interface IRestTimerProps {
 
 const SelectRestTimer: React.FC<IRestTimerProps> = ({ ex_id, routine_id }) => {
   const dispatch = useAppDispatch()
-  const [time, setTime] = React.useState('')
+  // const [time, setTime] = React.useState('')
+  const { all_routines } = useAppSelector((state) => state.routine)
+  const routine = all_routines.find((routine) => routine.id === routine_id)
+  const ex = routine?.exs.find((ex) => ex.id === ex_id)
 
   const handleChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value as string)
+    // setTime(event.target.value as string)
     dispatch(
       setRestTimer({
         routine_id,
@@ -50,7 +51,7 @@ const SelectRestTimer: React.FC<IRestTimerProps> = ({ ex_id, routine_id }) => {
         <Select
           labelId='demo-simple-select-label'
           id='demo-simple-select'
-          value={time ? time : 'Без таймера'}
+          value={ex?.restTimer ? ex.restTimer : 'Без таймера'}
           label='Отдых'
           onChange={handleChange}
         >

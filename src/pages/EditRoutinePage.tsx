@@ -36,6 +36,7 @@ import {
   Draggable,
   DropResult,
 } from '@hello-pangea/dnd'
+import { SelectRestTimer } from '../components'
 
 const MyForm = styled('form')({
   marginTop: '5rem',
@@ -168,7 +169,11 @@ const EditRoutinePage: FC = () => {
                                 </Button>
                               </Grid>
                             </Grid>
-
+                            {/* timer */}
+                            <SelectRestTimer
+                              ex_id={ex_id}
+                              routine_id={routine.id}
+                            />
                             {/* set */}
                             {/* sets */}
                             <Grid container>
