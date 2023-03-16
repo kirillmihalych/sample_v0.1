@@ -6,7 +6,6 @@ import FilteredCategories from './FilteredCategories'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import SelectRestTimer from './SelectRestTimer'
-import RestTimer from './RestTimer'
 
 export {
   Navbar,
@@ -17,5 +16,4 @@ export {
   SignIn,
   SignUp,
   SelectRestTimer,
-  RestTimer,
 }

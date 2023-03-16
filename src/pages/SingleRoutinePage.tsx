@@ -3,6 +3,8 @@ import { useAppSelector } from '../app/hooks'
 import { useParams } from 'react-router-dom'
 // MUI imports
 import { Container, Typography, Grid, Box } from '@mui/material'
+// MUI icons
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 const SingleRoutinePage: FC = () => {
   const { all_routines } = useAppSelector((state) => state.routine)
@@ -38,13 +40,29 @@ const SingleRoutinePage: FC = () => {
                   <Typography
                     variant='h6'
                     sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                       bgcolor: 'black',
                       color: '#F3F3F3',
                       paddingLeft: '10px',
                       paddingRight: '10px',
                     }}
                   >
-                    {exercise.title ? exercise.title : 'имя не введено'}
+                    <Box>
+                      {exercise.title ? exercise.title : 'имя не введено'}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <AccessTimeIcon />
+                      {exercise.restTimer}
+                    </Box>
                   </Typography>
                   <Grid container columnSpacing={2}>
                     {/* sets */}

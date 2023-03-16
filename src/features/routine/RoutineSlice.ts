@@ -9,8 +9,6 @@ import {
   IReorderExs,
   IAddCategoryToRoutine,
 } from '../../interfaces'
-// timer
-import { useTimer } from 'use-timer'
 
 // convert object to string and store in localStorage
 const saveToLocalStorage = (workouts: IRoutine[]) => {
