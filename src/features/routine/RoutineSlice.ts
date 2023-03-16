@@ -25,7 +25,14 @@ export const loadFromLocalStorage = () => {
   try {
     const routine = localStorage.getItem('all_routines')
     if (routine === null) {
-      return [{ id: 'empty_routine', title: 'пустая тренировка', exs: [] }]
+      return [
+        {
+          id: 'empty_routine',
+          title: 'пустая тренировка',
+          exs: [],
+          category: [{ id: 'Все', title: 'Все' }],
+        },
+      ]
     }
     return JSON.parse(routine)
   } catch (e) {
@@ -43,6 +50,7 @@ const routineSlice = createSlice({
   name: 'routine',
   initialState,
   reducers: {
+    // routine actions
     addRoutine(state) {
       let id = uuidv4()
       let short_id = id.slice(0, 3)
@@ -50,9 +58,68 @@ const routineSlice = createSlice({
         id: short_id,
         title: '',
         exs: [],
-        category: [],
+        category: [
+          {
+            id: 'Все',
+            title: 'Все',
+          },
+        ],
       })
     },
+    removeRoutine(state, action: PayloadAction<string>) {
+      const id = action.payload
+      state.all_routines = state.all_routines.filter(
+        (routine) => routine.id !== id
+      )
+      saveToLocalStorage(state.all_routines)
+    },
+    saveRoutine(state) {
+      saveToLocalStorage(state.all_routines)
+    },
+    setRoutineName(state, action: PayloadAction<IAction>) {
+      const { routine_id, title } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.title = title as string
+        }
+        return routine
+      })
+    },
+    reorderRoutines(state, action: PayloadAction<IRoutine[]>) {
+      state.all_routines = action.payload
+      saveToLocalStorage(state.all_routines)
+    },
+    addCategoryToRoutine(state, action: PayloadAction<IAddCategoryToRoutine>) {
+      const { id, categoryId, checkbox } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          const category = routine.category?.find(
+            (category) => category.id === categoryId
+          )
+          // add category
+          if (!category && checkbox) {
+            routine.category?.push({ id: categoryId, title: categoryId })
+          }
+          // remove category
+          if (!checkbox) {
+            routine.category = routine.category?.filter(
+              (item) => item.id !== categoryId
+            )
+          }
+        }
+        return routine
+      })
+      saveToLocalStorage(state.all_routines)
+    },
+    filterRoutines(state, action: PayloadAction<string>) {
+      const id = action.payload
+      state.filtered_routines = state.all_routines.filter((routine) => {
+        console.log(id)
+        let finded = routine.category?.find((category) => category.id === id)
+        return finded ? routine : null
+      })
+    },
+    // exercise actions
     addExercise(state, action: PayloadAction<string>) {
       const id = action.payload
       let uu_id = uuidv4()
@@ -71,36 +138,6 @@ const routineSlice = createSlice({
               },
             ],
           })
-        }
-        return routine
-      })
-    },
-    addSet(state, action: PayloadAction<IAction>) {
-      const { routine_id, ex_id } = action.payload
-      let id = uuidv4()
-      let short_id = id.slice(0, 3)
-      state.all_routines.map((routine) => {
-        if (routine.id === routine_id) {
-          routine.exs.map((ex: IExercise) => {
-            if (ex.id === ex_id) {
-              ex.sets.push({
-                number: short_id,
-                weight: '0',
-                reps: '0',
-                isDone: false,
-              })
-            }
-            return ex
-          })
-        }
-        return routine
-      })
-    },
-    setRoutineName(state, action: PayloadAction<IAction>) {
-      const { routine_id, title } = action.payload
-      state.all_routines.map((routine) => {
-        if (routine.id === routine_id) {
-          routine.title = title as string
         }
         return routine
       })
@@ -157,6 +194,46 @@ const routineSlice = createSlice({
         return routine
       })
     },
+    removeExercise(state, action: PayloadAction<IAction>) {
+      const { routine_id, ex_id } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs = routine.exs.filter((ex: IExercise) => ex.id !== ex_id)
+        }
+        return routine
+      })
+    },
+    reorderExs(state, action: PayloadAction<IReorderExs>) {
+      const { id, exs } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === id) {
+          routine.exs = exs
+        }
+        return routine
+      })
+    },
+    // sets
+    addSet(state, action: PayloadAction<IAction>) {
+      const { routine_id, ex_id } = action.payload
+      let id = uuidv4()
+      let short_id = id.slice(0, 3)
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs.map((ex: IExercise) => {
+            if (ex.id === ex_id) {
+              ex.sets.push({
+                number: short_id,
+                weight: '0',
+                reps: '0',
+                isDone: false,
+              })
+            }
+            return ex
+          })
+        }
+        return routine
+      })
+    },
     removeSet(state, action: PayloadAction<IAction>) {
       const { routine_id, ex_id, number } = action.payload
       state.all_routines.map((routine) => {
@@ -169,68 +246,6 @@ const routineSlice = createSlice({
           })
         }
         return routine
-      })
-    },
-    removeExercise(state, action: PayloadAction<IAction>) {
-      const { routine_id, ex_id } = action.payload
-      state.all_routines.map((routine) => {
-        if (routine.id === routine_id) {
-          routine.exs = routine.exs.filter((ex: IExercise) => ex.id !== ex_id)
-        }
-        return routine
-      })
-    },
-    removeRoutine(state, action: PayloadAction<string>) {
-      const id = action.payload
-      state.all_routines = state.all_routines.filter(
-        (routine) => routine.id !== id
-      )
-      saveToLocalStorage(state.all_routines)
-    },
-    saveRoutine(state) {
-      saveToLocalStorage(state.all_routines)
-    },
-    reorderRoutines(state, action: PayloadAction<IRoutine[]>) {
-      state.all_routines = action.payload
-      saveToLocalStorage(state.all_routines)
-    },
-    reorderExs(state, action: PayloadAction<IReorderExs>) {
-      const { id, exs } = action.payload
-      state.all_routines.map((routine) => {
-        if (routine.id === id) {
-          routine.exs = exs
-        }
-        return routine
-      })
-    },
-    addCategoryToRoutine(state, action: PayloadAction<IAddCategoryToRoutine>) {
-      const { id, categoryId, checkbox } = action.payload
-      state.all_routines.map((routine) => {
-        if (routine.id === id) {
-          const category = routine.category?.find(
-            (category) => category.id === categoryId
-          )
-          // add category
-          if (!category && checkbox) {
-            routine.category?.push({ id: categoryId, title: categoryId })
-          }
-          // remove category
-          if (!checkbox) {
-            routine.category = routine.category?.filter(
-              (item) => item.id !== categoryId
-            )
-          }
-        }
-        return routine
-      })
-      saveToLocalStorage(state.all_routines)
-    },
-    filterRoutines(state, action: PayloadAction<string>) {
-      const id = action.payload
-      state.filtered_routines = state.all_routines.filter((routine) => {
-        console.log(id)
-        let finded = routine.category?.find((category) => category.id === id)
-        return finded ? routine : null
       })
     },
     setIsDone(state, action: PayloadAction<IAction>) {
@@ -284,28 +299,48 @@ const routineSlice = createSlice({
         return routine
       })
     },
+    // note
+    addNote(state, action: PayloadAction<IAction>) {
+      const { routine_id, ex_id, title } = action.payload
+      state.all_routines.map((routine) => {
+        if (routine.id === routine_id) {
+          routine.exs.map((ex: IExercise) => {
+            if (ex.id === ex_id) {
+              ex.note = title
+            }
+            return ex
+          })
+        }
+        return routine
+      })
+    },
   },
 })
 
 export const {
+  // routine actions
   addRoutine,
-  addExercise,
-  addSet,
+  saveRoutine,
+  removeRoutine,
   setRoutineName,
+  addCategoryToRoutine,
+  reorderRoutines,
+  filterRoutines,
+  // exercise actions
+  addExercise,
   setExerciseName,
   setExerciseReps,
-  saveRoutine,
   setExerciseWeight,
-  removeRoutine,
   removeExercise,
-  removeSet,
-  reorderRoutines,
   reorderExs,
-  addCategoryToRoutine,
-  filterRoutines,
+  // set actions
+  addSet,
+  removeSet,
   setIsDone,
   setIsUndone,
   setRestTimer,
+  // note
+  addNote,
 } = routineSlice.actions
 
 export default routineSlice.reducer

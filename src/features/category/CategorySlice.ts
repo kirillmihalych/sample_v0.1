@@ -17,6 +17,7 @@ export const loadFromLocalStorage = () => {
     const routine = localStorage.getItem('workout_protocol_routines')
     if (routine === null) {
       return [
+        { id: 'Все', title: 'Все' },
         {
           id: 'Фавориты',
           title: 'Фавориты',

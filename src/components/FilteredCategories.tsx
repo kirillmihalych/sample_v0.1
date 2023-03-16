@@ -14,7 +14,7 @@ const FilteredCategories: FC<IFilteredCategoriesProps> = ({ id }) => {
   const { all_routines } = useAppSelector((state) => state.routine)
 
   const finded = all_routines.find((routine) => routine.id === id) as IRoutine
-  const routineCategories = finded.category as ICategory[]
+  const routineCategories = finded?.category as ICategory[]
   const displayed = []
 
   if (finded && routineCategories) {

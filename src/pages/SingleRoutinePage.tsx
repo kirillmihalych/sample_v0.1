@@ -1,17 +1,31 @@
 import { FC } from 'react'
-import { useAppSelector } from '../app/hooks'
-import { useParams } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { useParams, useNavigate } from 'react-router-dom'
 // MUI imports
-import { Container, Typography, Grid, Box } from '@mui/material'
+import { Container, Typography, Grid, Box, IconButton } from '@mui/material'
 // MUI icons
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined'
+import { removeRoutine } from '../features/routine/RoutineSlice'
 
 const SingleRoutinePage: FC = () => {
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const { all_routines } = useAppSelector((state) => state.routine)
   const { drawerOpen } = useAppSelector((state) => state.category)
   const { id } = useParams()
 
   const routine = all_routines.find((routine) => routine.id === id)
+
+  const handleEdit = () => {
+    navigate(`/routine-editing/${id}`)
+  }
+
+  const handleDelete = () => {
+    dispatch(removeRoutine(id as string))
+    navigate('/')
+  }
   return (
     <div>
       {routine ? (
@@ -25,6 +39,14 @@ const SingleRoutinePage: FC = () => {
         >
           <Typography variant='h4'>Протокол</Typography>
           <Typography variant='h4'>«{routine.title}»</Typography>
+          <Box>
+            <IconButton color='primary' onClick={handleEdit}>
+              <ModeEditOutlinedIcon />
+            </IconButton>
+            <IconButton color='primary' onClick={handleDelete}>
+              <DeleteOutlineIcon />
+            </IconButton>
+          </Box>
           {/* exercises */}
           <Grid
             container
@@ -35,6 +57,11 @@ const SingleRoutinePage: FC = () => {
           >
             {routine.exs.map((exercise) => {
               const { sets } = exercise
+              const timer = Number(exercise.restTimer)
+
+              const minutes = Math.ceil(timer / 60)
+              const seconds = timer % 60
+
               return (
                 <Grid item key={exercise.id}>
                   <Typography
@@ -47,6 +74,7 @@ const SingleRoutinePage: FC = () => {
                       color: '#F3F3F3',
                       paddingLeft: '10px',
                       paddingRight: '10px',
+                      width: '450px',
                     }}
                   >
                     <Box>
@@ -61,12 +89,20 @@ const SingleRoutinePage: FC = () => {
                       }}
                     >
                       <AccessTimeIcon />
-                      {exercise.restTimer}
+                      {timer
+                        ? `${minutes > 9 ? minutes : `0${minutes}`}:${
+                            seconds > 9 ? seconds : `0${seconds}`
+                          }`
+                        : '00:00'}
                     </Box>
                   </Typography>
-                  <Grid container columnSpacing={2}>
+
+                  <Typography variant='body2' sx={{ p: 1 }}>
+                    {exercise.note}
+                  </Typography>
+                  <Grid container columnSpacing={2} sx={{ width: '650px' }}>
                     {/* sets */}
-                    <Grid item>
+                    <Grid item xs={4}>
                       <Typography variant='h6' color='secondary.dark'>
                         подходы
                       </Typography>
@@ -87,7 +123,7 @@ const SingleRoutinePage: FC = () => {
                       })}
                     </Grid>
                     {/* weights */}
-                    <Grid item>
+                    <Grid item xs={4}>
                       <Typography variant='h6' color='secondary.dark'>
                         вес
                       </Typography>
@@ -95,7 +131,10 @@ const SingleRoutinePage: FC = () => {
                         return (
                           <Box
                             key={set.number}
-                            sx={{ bgcolor: '#b3b3b3', paddingTop: '8px' }}
+                            sx={{
+                              bgcolor: '#b3b3b3',
+                              paddingTop: '8px',
+                            }}
                           >
                             <Grid item>
                               <Typography align='center'>
@@ -108,7 +147,7 @@ const SingleRoutinePage: FC = () => {
                       })}
                     </Grid>
                     {/* reps */}
-                    <Grid item>
+                    <Grid item xs={4}>
                       <Typography variant='h6' color='secondary.dark'>
                         повторения
                       </Typography>
@@ -127,6 +166,7 @@ const SingleRoutinePage: FC = () => {
                       })}
                     </Grid>
                   </Grid>
+                  <hr></hr>
                 </Grid>
               )
             })}

@@ -1,15 +1,12 @@
-import { FC, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { FC } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import {
   // AppBar,
   Box,
   Toolbar,
   IconButton,
   Typography,
-  Menu,
-  MenuItem,
 } from '@mui/material'
-import HomeIcon from '@mui/icons-material/Home'
 // Drawer imports
 import { styled, Theme, CSSObject } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
@@ -33,8 +30,6 @@ import {
   openEditLabelList,
 } from '../features/category/CategorySlice'
 import { filterRoutines } from '../features/routine/RoutineSlice'
-import { AccountCircle } from '@mui/icons-material'
-import { openSignInMode } from '../features/user/UserSlice'
 
 // drawer logic
 const drawerWidth = 240
@@ -112,22 +107,12 @@ const Drawer = styled(MuiDrawer, {
 const Navbar: FC = () => {
   const dispatch = useAppDispatch()
   const { categories, drawerOpen } = useAppSelector((state) => state.category)
-  const { user } = useAppSelector((state) => state.user)
 
   // drawer logic
   const handleDrawerToggle = () => {
     dispatch(toggleDrawer())
   }
 
-  // login logic
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <CssBaseline />
@@ -141,14 +126,28 @@ const Navbar: FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            <Link to='/' color='main'>
-              <IconButton color='secondary'>
-                <HomeIcon />
-              </IconButton>
-            </Link>
+          <Typography
+            color='secondary'
+            variant='h6'
+            component={RouterLink}
+            to='/'
+            sx={{
+              alignSelf: 'center',
+              marginLeft: '24px',
+              paddingTop: '12px',
+              textDecoration: 'none',
+              height: '64px',
+              // paddingBottom: '20px',
+              borderBottom: '3px solid #141414',
+              '&:hover': {
+                borderRadius: '2px',
+                borderBottom: '3px solid white',
+              },
+            }}
+          >
+            Тренировки
           </Typography>
-          <Typography>
+          {/* <Typography>
             Добро пожаловать, {user.name ? user.name : 'Гость'}!
           </Typography>
           <div>
@@ -182,7 +181,7 @@ const Navbar: FC = () => {
                 Выйти
               </MenuItem>
             </Menu>
-          </div>
+          </div> */}
         </Toolbar>
       </AppBar>
       {/* drawer start */}
@@ -234,37 +233,64 @@ const Navbar: FC = () => {
               sx={{ opacity: drawerOpen ? 1 : 0 }}
             />
           </ListItemButton>
-          <Divider />
-          {categories.map((category) => (
-            <ListItem
-              key={category.title}
-              disablePadding
-              sx={{ display: 'block' }}
-              onClick={() => dispatch(filterRoutines(category.id))}
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: drawerOpen ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={() => dispatch(filterRoutines('Все'))}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: drawerOpen ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
             >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: drawerOpen ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: drawerOpen ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
+              <LabelOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'Все'}
+              sx={{ opacity: drawerOpen ? 1 : 0 }}
+            />
+          </ListItemButton>
+          <Divider />
+          {categories.map((category) => {
+            if (category.title !== 'Все') {
+              return (
+                <ListItem
+                  key={category.title}
+                  disablePadding
+                  sx={{ display: 'block' }}
+                  onClick={() => dispatch(filterRoutines(category.id))}
                 >
-                  <LabelOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={category.title}
-                  sx={{ opacity: drawerOpen ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: drawerOpen ? 'initial' : 'center',
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: drawerOpen ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <LabelOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={category.title}
+                      sx={{ opacity: drawerOpen ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              )
+            }
+            return null
+          })}
         </List>
         {/* <Divider /> */}
       </Drawer>
