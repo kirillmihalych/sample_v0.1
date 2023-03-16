@@ -18,6 +18,7 @@ export interface IExercise {
   sets: ISet[]
   timer_trigger?: boolean
   restTimer?: string
+  note?: string
 }
 
 export interface ISet {

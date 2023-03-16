@@ -36,9 +36,9 @@ import FilteredCategories from '../components/FilteredCategories'
 
 const MyGridContainer = styled(Grid)({
   width: '95%',
-  minWidth: 450,
+  // minWidth: 450,
   maxWidth: 1000,
-  marginTop: '5rem',
+  margin: '5rem auto',
 })
 
 const AllRoutinesPage: FC = () => {
@@ -46,7 +46,6 @@ const AllRoutinesPage: FC = () => {
   const { all_routines, filtered_routines } = useAppSelector(
     (state) => state.routine
   )
-  const { drawerOpen } = useAppSelector((state) => state.category)
 
   // MUI logic
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -78,7 +77,7 @@ const AllRoutinesPage: FC = () => {
       direction='row'
       justifyContent='center'
       alignItems='center'
-      sx={drawerOpen ? { marginLeft: '125px' } : null}
+      // sx={drawerOpen ? { marginLeft: '125px' } : null}
     >
       <Grid
         item
@@ -93,20 +92,28 @@ const AllRoutinesPage: FC = () => {
           variant='contained'
           color='secondary'
           sx={{
-            width: '75%',
+            width: '74.5%',
+            boxShadow: 'none',
+            border: '2px solid lightgrey',
+            bgcolor: 'white',
+            '&:hover': {
+              bgcolor: 'lightgrey',
+              boxShadow: 'none',
+              border: '2px solid black',
+            },
           }}
           component={RouterLink}
           to={'/create-routine'}
           onClick={() => dispatch(addRoutine())}
         >
-          <Typography>Новая тренировка</Typography>
+          <Typography>Создать тренировку</Typography>
           <IconButton>
             <AddBoxIcon fontSize='large' color='primary' />
           </IconButton>
         </Button>
       </Grid>
       {/* dnd */}
-      {filtered_routines.length > 1 ? (
+      {filtered_routines.length >= 1 ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId={'routines'}>
             {(provided) => (
@@ -135,8 +142,8 @@ const AllRoutinesPage: FC = () => {
                                 marginTop: '5px',
                                 padding: '0 12px',
                                 borderRadius: '5px',
-                                bgcolor: 'white',
-                                minHeight: '100px',
+                                bgcolor: '#F3F3F3',
+                                height: '125px',
                               }}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
@@ -146,9 +153,22 @@ const AllRoutinesPage: FC = () => {
                                 underline='none'
                                 component={RouterLink}
                                 to={`/routine/${routine.id}`}
-                                sx={{ width: 'calc(100% - 45px)' }}
+                                sx={{
+                                  width: 'calc(100% - 45px)',
+                                  padding: '20px',
+                                  // paddingLeft: 'calc(-20px)',
+                                  '&:hover': {
+                                    transition: 0.2,
+                                    bgcolor: '#b3b3b3',
+                                    borderRadius: '5px',
+                                  },
+                                }}
                               >
-                                <Typography>{routine.title}</Typography>
+                                <Typography variant='h6'>
+                                  {routine.title
+                                    ? routine.title
+                                    : 'пустая тренировка'}
+                                </Typography>
                               </Link>
                               {/* modal */}
                               <AddCategoryModal />
@@ -232,6 +252,7 @@ const AllRoutinesPage: FC = () => {
                                   {/* End of items */}
                                   {/* //////////// */}
                                   {/* Add category */}
+
                                   <MenuItem onClick={handleClose}>
                                     <Box
                                       sx={{
@@ -268,12 +289,31 @@ const AllRoutinesPage: FC = () => {
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   gap: '1rem',
+                                  paddingLeft: '20px',
                                 }}
                               >
                                 {/* отображение категорий */}
                                 <FilteredCategories id={routine.id} />
                                 {/* отображение категорий */}
                               </Box>
+                              <Button
+                                variant='contained'
+                                component={RouterLink}
+                                to={`/current_routine/${routine.id}`}
+                                sx={{
+                                  fontSize: '15px',
+                                  height: '24px',
+                                  // padding: '0px 10px',
+                                  // borderRadius: '5px',
+                                  marginBottom: '5px',
+                                  bgcolor: 'black',
+                                  '&:hover': {
+                                    bgcolor: 'grey',
+                                  },
+                                }}
+                              >
+                                Старт
+                              </Button>
                             </Grid>
                           )}
                         </Draggable>
@@ -314,8 +354,8 @@ const AllRoutinesPage: FC = () => {
                                 marginTop: '5px',
                                 padding: '0 12px',
                                 borderRadius: '5px',
-                                bgcolor: 'white',
-                                minHeight: '125px',
+                                bgcolor: '#F3F3F3',
+                                height: '125px',
                               }}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
@@ -325,9 +365,22 @@ const AllRoutinesPage: FC = () => {
                                 underline='none'
                                 component={RouterLink}
                                 to={`/routine/${routine.id}`}
-                                sx={{ width: 'calc(100% - 45px)' }}
+                                sx={{
+                                  width: 'calc(100% - 45px)',
+                                  padding: '20px',
+                                  // paddingLeft: 'calc(-20px)',
+                                  '&:hover': {
+                                    transition: 0.2,
+                                    bgcolor: '#b3b3b3',
+                                    borderRadius: '5px',
+                                  },
+                                }}
                               >
-                                <Typography>{routine.title}</Typography>
+                                <Typography variant='h6'>
+                                  {routine.title
+                                    ? routine.title
+                                    : 'пустая тренировка'}
+                                </Typography>
                               </Link>
                               {/* modal */}
                               <AddCategoryModal />
@@ -448,6 +501,7 @@ const AllRoutinesPage: FC = () => {
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   gap: '1rem',
+                                  paddingLeft: '20px',
                                 }}
                               >
                                 {/* отображение категорий */}
@@ -458,6 +512,17 @@ const AllRoutinesPage: FC = () => {
                                 variant='contained'
                                 component={RouterLink}
                                 to={`/current_routine/${routine.id}`}
+                                sx={{
+                                  fontSize: '15px',
+                                  height: '24px',
+                                  // padding: '0px 10px',
+                                  // borderRadius: '5px',
+                                  marginBottom: '5px',
+                                  bgcolor: 'black',
+                                  '&:hover': {
+                                    bgcolor: 'grey',
+                                  },
+                                }}
                               >
                                 Старт
                               </Button>

@@ -30,6 +30,7 @@ import {
 // redux actions
 import {
   addExercise,
+  addNote,
   addSet,
   removeExercise,
   removeSet,
@@ -280,11 +281,33 @@ const CurrentWorkout: FC = () => {
                                 </Button>
                               </Grid>
                             </Grid>
-                            {/* rest */}
-                            <SelectRestTimer
-                              ex_id={ex_id}
-                              routine_id={routine.id}
-                            />
+                            <Box sx={{ width: '100%' }}>
+                              {/* rest */}
+                              <SelectRestTimer
+                                ex_id={ex_id}
+                                routine_id={routine.id}
+                              />
+                              {/* note */}
+                              <TextField
+                                sx={{ padding: '1rem' }}
+                                id='outlined-multiline-flexible'
+                                placeholder='Добавить заметку'
+                                value={ex.note ? ex.note : ''}
+                                onChange={(e) =>
+                                  dispatch(
+                                    addNote({
+                                      routine_id: routine.id,
+                                      ex_id,
+                                      title: e.target.value,
+                                    })
+                                  )
+                                }
+                                multiline
+                                maxRows={4}
+                                fullWidth
+                              />
+                            </Box>
+
                             {/* set */}
                             {/* sets */}
                             <Grid container>

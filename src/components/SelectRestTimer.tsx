@@ -38,6 +38,7 @@ const SelectRestTimer: React.FC<IRestTimerProps> = ({ ex_id, routine_id }) => {
     <Box
       sx={{
         minWidth: 120,
+        maxWidth: 240,
         display: 'flex',
         justifyContent: 'centeer',
         alignItems: 'center',

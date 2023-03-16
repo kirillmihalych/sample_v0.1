@@ -12,6 +12,7 @@ import {
   removeExercise,
   removeSet,
   reorderExs,
+  addNote,
 } from '../features/routine/RoutineSlice'
 import { SelectRestTimer } from '../components'
 // MUI imports
@@ -78,6 +79,11 @@ const RoutineConstructor: FC = () => {
       items.splice(destination.index, 0, newOrder)
       dispatch(reorderExs({ id: routine_id, exs: items }))
     }
+  }
+
+  // save routine
+  const saveRoutineHandler = () => {
+    dispatch(saveRoutine())
   }
 
   return (
@@ -160,10 +166,32 @@ const RoutineConstructor: FC = () => {
                             </Grid>
                           </Grid>
                           {/* timer */}
-                          <SelectRestTimer
-                            ex_id={ex_id}
-                            routine_id={routine_id}
-                          />
+                          <Box sx={{ width: '100%' }}>
+                            {/* rest */}
+                            <SelectRestTimer
+                              ex_id={ex_id}
+                              routine_id={routine_id}
+                            />
+                            {/* note */}
+                            <TextField
+                              sx={{ padding: '1rem' }}
+                              id='outlined-multiline-flexible'
+                              placeholder='Добавить заметку'
+                              value={ex.note ? ex.note : ''}
+                              onChange={(e) =>
+                                dispatch(
+                                  addNote({
+                                    routine_id,
+                                    ex_id,
+                                    title: e.target.value,
+                                  })
+                                )
+                              }
+                              multiline
+                              maxRows={4}
+                              fullWidth
+                            />
+                          </Box>
                           {/* sets */}
                           <Grid container>
                             {/* подходы */}
@@ -310,13 +338,13 @@ const RoutineConstructor: FC = () => {
                 </MyBox>
                 <MyBox>
                   <Button
-                    disabled={title ? false : true}
+                    disabled={title.length >= 1 ? false : true}
                     component={Link}
                     to={`/routine/${routine_id}`}
                     variant='contained'
                     color='secondary'
                     fullWidth
-                    onClick={() => dispatch(saveRoutine())}
+                    onClick={saveRoutineHandler}
                     sx={{ border: '1px solid black' }}
                   >
                     <SaveIcon color='inherit' />
