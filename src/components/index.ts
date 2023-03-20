@@ -6,6 +6,7 @@ import FilteredCategories from './FilteredCategories'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import SelectRestTimer from './SelectRestTimer'
+import DateCalendarComponent from './DateCalendarMUI'
 
 export {
   Navbar,
@@ -16,4 +17,5 @@ export {
   SignIn,
   SignUp,
   SelectRestTimer,
+  DateCalendarComponent,
 }

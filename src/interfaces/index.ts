@@ -10,6 +10,8 @@ export interface IRoutine {
   exs: IExercise[]
   category?: ICategory[]
   time?: number
+  date?: string
+  old_id?: string
 }
 
 export interface IExercise {
@@ -19,6 +21,7 @@ export interface IExercise {
   timer_trigger?: boolean
   restTimer?: string
   note?: string
+  img?: string
 }
 
 export interface ISet {
@@ -34,6 +37,7 @@ export interface IAction {
   title?: string
   number?: string
   num?: string
+  file?: string
 }
 
 export interface IAddCategoryToRoutine {

@@ -5,6 +5,7 @@ import {
   EditRoutinePage,
   CurrentWorkout,
   WelcomePage,
+  HistoryPage,
 } from '../pages'
 import SingleRoutinePage from '../pages/SingleRoutinePage'
 
@@ -22,6 +23,7 @@ export enum RouteNames {
   SINGLE_ROUTINE = '/routine/:id',
   CURRENT_ROUTINE = 'current_routine/:id',
   WELCOME_PAGE = '/welcome_page',
+  HISTORY = '/history',
 }
 
 export const routes: IRoute[] = [
@@ -31,6 +33,7 @@ export const routes: IRoute[] = [
   { path: RouteNames.CURRENT_ROUTINE, element: <CurrentWorkout /> },
   { path: RouteNames.EDIT_ROUTINE, element: <EditRoutinePage /> },
   { path: RouteNames.WELCOME_PAGE, element: <WelcomePage /> },
+  { path: RouteNames.HISTORY, element: <HistoryPage /> },
 ]
 
 export const loginPageRoutes: IRoute[] = [

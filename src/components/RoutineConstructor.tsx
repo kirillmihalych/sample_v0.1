@@ -305,7 +305,6 @@ const RoutineConstructor: FC = () => {
                               })}
                             </Grid>
                           </Grid>
-
                           {/* добавить подход */}
                           <Button
                             variant='contained'

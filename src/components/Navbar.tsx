@@ -147,6 +147,27 @@ const Navbar: FC = () => {
           >
             Тренировки
           </Typography>
+          <Typography
+            color='secondary'
+            variant='h6'
+            component={RouterLink}
+            to='/history'
+            sx={{
+              alignSelf: 'center',
+              marginLeft: '24px',
+              paddingTop: '12px',
+              textDecoration: 'none',
+              height: '64px',
+              // paddingBottom: '20px',
+              borderBottom: '3px solid #141414',
+              '&:hover': {
+                borderRadius: '2px',
+                borderBottom: '3px solid white',
+              },
+            }}
+          >
+            История
+          </Typography>
           {/* <Typography>
             Добро пожаловать, {user.name ? user.name : 'Гость'}!
           </Typography>
