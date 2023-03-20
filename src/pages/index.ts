@@ -4,6 +4,7 @@ import SingleRoutinePage from './SingleRoutinePage'
 import EditRoutinePage from './EditRoutinePage'
 import CurrentWorkout from './CurrentWorkout'
 import WelcomePage from './WelcomePage'
+import HistoryPage from './HistoryPage'
 
 export {
   CreateRoutinePage,
@@ -12,4 +13,5 @@ export {
   EditRoutinePage,
   CurrentWorkout,
   WelcomePage,
+  HistoryPage,
 }

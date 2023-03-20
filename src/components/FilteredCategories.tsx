@@ -4,6 +4,7 @@ import { ICategory, IRoutine } from '../interfaces'
 // MUI Imports
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
+// redux
 
 interface IFilteredCategoriesProps {
   id: string

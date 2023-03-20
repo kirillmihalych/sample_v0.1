@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTimer } from 'use-timer'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
+import dayjs from 'dayjs'
 // MUI imports
 import {
   Typography,
@@ -77,6 +78,12 @@ const CurrentWorkout: FC = () => {
   const { time } = useTimer({
     autostart: true,
   })
+
+  const day = dayjs().get('date')
+  const month = dayjs().get('month') + 1
+  const year = dayjs().get('year')
+
+  const currentTime = dayjs().hour() + ':' + dayjs().minute()
   // rest timer
   const {
     time: restTimer,
@@ -497,6 +504,7 @@ const CurrentWorkout: FC = () => {
                   exs: routine.exs,
                   category: routine.category,
                   time: time,
+                  date: `${day}-${month}-${year} at ${currentTime}`,
                 })
               }
               sx={{ border: '1px solid black' }}

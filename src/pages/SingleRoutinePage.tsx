@@ -39,6 +39,7 @@ const SingleRoutinePage: FC = () => {
         >
           <Typography variant='h4'>Протокол</Typography>
           <Typography variant='h4'>«{routine.title}»</Typography>
+
           <Box>
             <IconButton color='primary' onClick={handleEdit}>
               <ModeEditOutlinedIcon />
@@ -61,7 +62,6 @@ const SingleRoutinePage: FC = () => {
 
               const minutes = Math.ceil(timer / 60)
               const seconds = timer % 60
-
               return (
                 <Grid item key={exercise.id}>
                   <Typography

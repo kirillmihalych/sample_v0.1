@@ -7,6 +7,9 @@ import { ThemeProvider } from '@mui/material/styles'
 import { colorTheme } from './theme'
 import { WelcomePage } from './pages'
 import { EditCategoriesModal } from './components/EditCategoriesModal'
+// import dayjs from 'dayjs'
+
+// dayjs.locale('fr')
 
 const App: FC = () => {
   const { isUserSignedIn } = useAppSelector((state) => state.user)

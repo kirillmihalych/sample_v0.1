@@ -94,10 +94,10 @@ const AllRoutinesPage: FC = () => {
           sx={{
             width: '74.5%',
             boxShadow: 'none',
-            border: '2px solid lightgrey',
-            bgcolor: 'white',
+            border: '2px solid black',
+            bgcolor: 'lightgrey',
             '&:hover': {
-              bgcolor: 'lightgrey',
+              bgcolor: 'white',
               boxShadow: 'none',
               border: '2px solid black',
             },
