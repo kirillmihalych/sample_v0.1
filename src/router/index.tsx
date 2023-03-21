@@ -6,8 +6,11 @@ import {
   CurrentWorkout,
   WelcomePage,
   HistoryPage,
+  HistoryRoutinePage,
+  SingleRoutinePage,
+  AllExercisePage,
 } from '../pages'
-import SingleRoutinePage from '../pages/SingleRoutinePage'
+import ExercisePage from '../pages/ExercisePage'
 
 export interface IRoute {
   path: string
@@ -24,6 +27,9 @@ export enum RouteNames {
   CURRENT_ROUTINE = 'current_routine/:id',
   WELCOME_PAGE = '/welcome_page',
   HISTORY = '/history',
+  HISTORY_ROUTINE = '/history/history_routine/:id',
+  ALL_EXERCISE = '/all-exercise',
+  EXERCISE_PAGE = '/exercise/:id',
 }
 
 export const routes: IRoute[] = [
@@ -34,6 +40,9 @@ export const routes: IRoute[] = [
   { path: RouteNames.EDIT_ROUTINE, element: <EditRoutinePage /> },
   { path: RouteNames.WELCOME_PAGE, element: <WelcomePage /> },
   { path: RouteNames.HISTORY, element: <HistoryPage /> },
+  { path: RouteNames.HISTORY_ROUTINE, element: <HistoryRoutinePage /> },
+  { path: RouteNames.ALL_EXERCISE, element: <AllExercisePage /> },
+  { path: RouteNames.EXERCISE_PAGE, element: <ExercisePage /> },
 ]
 
 export const loginPageRoutes: IRoute[] = [

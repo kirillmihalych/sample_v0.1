@@ -504,7 +504,7 @@ const CurrentWorkout: FC = () => {
                   exs: routine.exs,
                   category: routine.category,
                   time: time,
-                  date: `${day}-${month}-${year} at ${currentTime}`,
+                  date: `${day}-${month}-${year}`,
                 })
               }
               sx={{ border: '1px solid black' }}
