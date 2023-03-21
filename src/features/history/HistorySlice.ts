@@ -27,12 +27,29 @@ export const loadFromLocalStorage = () => {
   }
 }
 
+const getExercisesFromHistory = () => {
+  const routineStore = loadFromLocalStorage()
+
+  let res: string[] = []
+
+  routineStore.forEach((routine: IRoutine) => {
+    routine.exs.forEach((ex) => {
+      res.push(ex.title as string)
+    })
+  })
+
+  const unique = new Set(res)
+  return Array.from(unique)
+}
+
 interface IInitialStateProps {
   history_store: IRoutine[]
+  ex_names: string[]
 }
 
 const initialState: IInitialStateProps = {
   history_store: loadFromLocalStorage(),
+  ex_names: getExercisesFromHistory(),
 }
 
 const historySlice = createSlice({
@@ -46,6 +63,7 @@ const historySlice = createSlice({
       routine.old_id = routine.id
       routine.id = short_id
       state.history_store.push(routine)
+
       saveToLocalStorage(state.history_store)
     },
     deleteWorkoutFormHistory(state, action: PayloadAction<string>) {

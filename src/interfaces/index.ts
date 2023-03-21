@@ -22,6 +22,7 @@ export interface IExercise {
   restTimer?: string
   note?: string
   img?: string
+  routine_id?: string
 }
 
 export interface ISet {

@@ -5,6 +5,8 @@ import EditRoutinePage from './EditRoutinePage'
 import CurrentWorkout from './CurrentWorkout'
 import WelcomePage from './WelcomePage'
 import HistoryPage from './HistoryPage'
+import HistoryRoutinePage from './HistoryRoutinePage'
+import AllExercisePage from './AllExercisePage'
 
 export {
   CreateRoutinePage,
@@ -14,4 +16,6 @@ export {
   CurrentWorkout,
   WelcomePage,
   HistoryPage,
+  HistoryRoutinePage,
+  AllExercisePage,
 }

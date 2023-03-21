@@ -74,7 +74,7 @@ const HistoryPage: FC = () => {
                   <Link
                     underline='none'
                     component={RouterLink}
-                    to={`/routine/${routine.id}`}
+                    to={`/history/history_routine/${routine.id}`}
                     sx={{
                       width: 'calc(100% - 45px)',
                       padding: '20px',
