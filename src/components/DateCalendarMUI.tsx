@@ -91,7 +91,7 @@ const DateCalendarComponent: React.FC = () => {
       <StaticDatePicker
         sx={{
           border: '2px solid black',
-          bgcolor: 'orange',
+          bgcolor: 'lightgrey',
         }}
         displayStaticWrapperAs='desktop'
         openTo='day'

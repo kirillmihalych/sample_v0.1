@@ -46,6 +46,9 @@ import { saveFinishedWorkout } from '../features/history/HistorySlice'
 import { IAction, IRoutine } from '../interfaces'
 import { SelectRestTimer } from '../components'
 import Paper from '@mui/material/Paper'
+// use sound
+import sound from '../assets/sound.wav'
+// import boopSfx from '../../sounds/boop'
 
 const MyForm = styled('form')({
   marginTop: '5rem',
@@ -83,7 +86,13 @@ const CurrentWorkout: FC = () => {
   const month = dayjs().get('month') + 1
   const year = dayjs().get('year')
 
-  const currentTime = dayjs().hour() + ':' + dayjs().minute()
+  const audio = new Audio(sound)
+  audio.volume = 0.25
+  function play() {
+    audio.play()
+  }
+
+  // const currentTime = dayjs().hour() + ':' + dayjs().minute()
   // rest timer
   const {
     time: restTimer,
@@ -97,6 +106,7 @@ const CurrentWorkout: FC = () => {
     onTimeOver: () => {
       setTimeout(function () {
         setTimeIsOver(true)
+        play()
       }, 1000)
     },
   })

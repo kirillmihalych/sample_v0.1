@@ -9,6 +9,8 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 // Router
 import { useParams, Link as RouterLink } from 'react-router-dom'
 import { ISet } from '../interfaces/index'
+// Sparklines
+import { Sparklines, SparklinesLine } from 'react-sparklines'
 
 export interface IEx {
   id: string
@@ -81,9 +83,13 @@ const ExercisePage: React.FC = () => {
   // calculate max reps at one workout
   const max_Reps = exs.map((ex) => {
     const reps = ex.sets.map((set: ISet) => Number(set.reps))
-    const maxValue = reps.reduce((acc: number, value: number) => acc + value)
-    return maxValue
+    const maxReps = reps.reduce((acc: number, value: number) => acc + value)
+    return maxReps
   })
+  const maxValue = max_Reps.sort((a, b) => b - a)
+
+  // sparkline data
+  const sparklineData = [0, ...max_Reps]
 
   return (
     <Box
@@ -112,12 +118,17 @@ const ExercisePage: React.FC = () => {
           <Typography variant='h6' color='initial'>
             Рекорды
           </Typography>
+
+          {/* grahp of reps */}
         </Box>{' '}
+        <Sparklines data={sparklineData}>
+          <SparklinesLine color='black' />
+        </Sparklines>
         <Typography variant='body2'>
           Повторов в подходе: {best_set[0]}
         </Typography>
         <Typography variant='body2'>
-          Повторов за тренировку: {max_Reps}
+          Повторов за тренировку: {maxValue[0]}
         </Typography>
       </Box>
       {/* history */}
