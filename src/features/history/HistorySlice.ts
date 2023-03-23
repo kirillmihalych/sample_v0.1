@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IRoutine } from '../../interfaces'
 // unique id
@@ -18,7 +19,7 @@ export const loadFromLocalStorage = () => {
   try {
     const routine = localStorage.getItem('history')
     if (routine === null) {
-      return null
+      return []
     }
     return JSON.parse(routine)
   } catch (e) {
@@ -27,16 +28,20 @@ export const loadFromLocalStorage = () => {
   }
 }
 
-const getExercisesFromHistory = () => {
+export const getExercisesFromHistory = () => {
   const routineStore = loadFromLocalStorage()
 
   let res: string[] = []
 
-  routineStore.forEach((routine: IRoutine) => {
-    routine.exs.forEach((ex) => {
-      res.push(ex.title as string)
+  if (routineStore) {
+    routineStore.forEach((routine: IRoutine) => {
+      routine.exs.forEach((ex) => {
+        res.push(ex.title as string)
+      })
     })
-  })
+  } else {
+    return []
+  }
 
   const unique = new Set(res)
   return Array.from(unique)
@@ -45,11 +50,13 @@ const getExercisesFromHistory = () => {
 interface IInitialStateProps {
   history_store: IRoutine[]
   ex_names: string[]
+  date: string
 }
 
 const initialState: IInitialStateProps = {
   history_store: loadFromLocalStorage(),
-  ex_names: getExercisesFromHistory(),
+  ex_names: [],
+  date: '',
 }
 
 const historySlice = createSlice({
@@ -73,10 +80,25 @@ const historySlice = createSlice({
       )
       saveToLocalStorage(state.history_store)
     },
+    setExircises(state) {
+      const exs = getExercisesFromHistory()
+      state.ex_names = exs
+    },
+    setWorkoutOnDate(state, action: PayloadAction<string>) {
+      state.date = action.payload
+    },
+    clearChosenDate(state) {
+      state.date = ''
+    },
   },
 })
 
-export const { saveFinishedWorkout, deleteWorkoutFormHistory } =
-  historySlice.actions
+export const {
+  saveFinishedWorkout,
+  deleteWorkoutFormHistory,
+  setWorkoutOnDate,
+  clearChosenDate,
+  setExircises,
+} = historySlice.actions
 
 export default historySlice.reducer

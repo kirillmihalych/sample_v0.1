@@ -23,6 +23,7 @@ export interface IExercise {
   note?: string
   img?: string
   routine_id?: string
+  isNew?: boolean
 }
 
 export interface ISet {

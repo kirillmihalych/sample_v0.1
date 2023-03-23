@@ -13,7 +13,14 @@ import {
 // convert object to string and store in localStorage
 const saveToLocalStorage = (workouts: IRoutine[]) => {
   try {
-    const routines = JSON.stringify(workouts)
+    const works = workouts.map((workout) => {
+      workout.exs.map((ex) => {
+        ex.isNew = false
+        return ex
+      })
+      return workout
+    })
+    const routines = JSON.stringify(works)
     localStorage.setItem('all_routines', routines)
   } catch (e) {
     console.warn(e)
@@ -137,6 +144,7 @@ const routineSlice = createSlice({
                 isDone: false,
               },
             ],
+            isNew: true,
           })
         }
         return routine

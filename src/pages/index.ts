@@ -7,6 +7,7 @@ import WelcomePage from './WelcomePage'
 import HistoryPage from './HistoryPage'
 import HistoryRoutinePage from './HistoryRoutinePage'
 import AllExercisePage from './AllExercisePage'
+import ChosenDay from './ChosenDay'
 
 export {
   CreateRoutinePage,
@@ -18,4 +19,5 @@ export {
   HistoryPage,
   HistoryRoutinePage,
   AllExercisePage,
+  ChosenDay,
 }

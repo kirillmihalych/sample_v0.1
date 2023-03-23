@@ -42,10 +42,18 @@ import {
   setIsDone,
   setIsUndone,
 } from '../features/routine/RoutineSlice'
-import { saveFinishedWorkout } from '../features/history/HistorySlice'
+import {
+  clearChosenDate,
+  saveFinishedWorkout,
+  setExircises,
+  setWorkoutOnDate,
+} from '../features/history/HistorySlice'
 import { IAction, IRoutine } from '../interfaces'
 import { SelectRestTimer } from '../components'
 import Paper from '@mui/material/Paper'
+// use sound
+import sound from '../assets/sound.wav'
+// import boopSfx from '../../sounds/boop'
 
 const MyForm = styled('form')({
   marginTop: '5rem',
@@ -73,6 +81,7 @@ const CurrentWorkout: FC = () => {
   const { id } = useParams()
   const { all_routines } = useAppSelector((state) => state.routine)
   const { drawerOpen } = useAppSelector((state) => state.category)
+  const { date: chosenDate } = useAppSelector((state) => state.history)
   const [timeIsOver, setTimeIsOver] = useState(false)
   // timer
   const { time } = useTimer({
@@ -83,7 +92,13 @@ const CurrentWorkout: FC = () => {
   const month = dayjs().get('month') + 1
   const year = dayjs().get('year')
 
-  const currentTime = dayjs().hour() + ':' + dayjs().minute()
+  const audio = new Audio(sound)
+  audio.volume = 0.25
+  function play() {
+    audio.play()
+  }
+
+  // const currentTime = dayjs().hour() + ':' + dayjs().minute()
   // rest timer
   const {
     time: restTimer,
@@ -97,6 +112,7 @@ const CurrentWorkout: FC = () => {
     onTimeOver: () => {
       setTimeout(function () {
         setTimeIsOver(true)
+        play()
       }, 1000)
     },
   })
@@ -111,6 +127,8 @@ const CurrentWorkout: FC = () => {
     dispatch(saveFinishedWorkout(routine))
     navigate('/')
     dispatch(setIsUndone(routine.id))
+    dispatch(clearChosenDate())
+    dispatch(setExircises())
   }
 
   const handleIsDone = (load: IAction) => {
@@ -504,7 +522,10 @@ const CurrentWorkout: FC = () => {
                   exs: routine.exs,
                   category: routine.category,
                   time: time,
-                  date: `${day}-${month}-${year}`,
+                  date:
+                    chosenDate.length > 0
+                      ? chosenDate
+                      : `${day}-${month}-${year}`,
                 })
               }
               sx={{ border: '1px solid black' }}

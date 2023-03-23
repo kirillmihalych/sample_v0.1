@@ -9,6 +9,7 @@ import {
   HistoryRoutinePage,
   SingleRoutinePage,
   AllExercisePage,
+  ChosenDay,
 } from '../pages'
 import ExercisePage from '../pages/ExercisePage'
 
@@ -30,6 +31,7 @@ export enum RouteNames {
   HISTORY_ROUTINE = '/history/history_routine/:id',
   ALL_EXERCISE = '/all-exercise',
   EXERCISE_PAGE = '/exercise/:id',
+  CHOSEN_DAY = '/day/:id',
 }
 
 export const routes: IRoute[] = [
@@ -43,6 +45,7 @@ export const routes: IRoute[] = [
   { path: RouteNames.HISTORY_ROUTINE, element: <HistoryRoutinePage /> },
   { path: RouteNames.ALL_EXERCISE, element: <AllExercisePage /> },
   { path: RouteNames.EXERCISE_PAGE, element: <ExercisePage /> },
+  { path: RouteNames.CHOSEN_DAY, element: <ChosenDay /> },
 ]
 
 export const loginPageRoutes: IRoute[] = [

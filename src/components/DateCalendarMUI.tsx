@@ -6,9 +6,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay'
 import { useAppSelector } from '../app/hooks'
-// MUI imports
+// Router imports
+import { useNavigate } from 'react-router-dom'
 
 const TrainingDay = (props: PickersDayProps<Dayjs>) => {
+  const navigate = useNavigate()
   const { day, outsideCurrentMonth, ...other } = props
   const single_day = day.get('date')
   const month = day.get('month') + 1
@@ -43,6 +45,7 @@ const TrainingDay = (props: PickersDayProps<Dayjs>) => {
           disableHighlightToday
           disableRipple
           focusRipple={false}
+          onClick={() => navigate(`/day/${date_format}`)}
         ></PickersDay>
       ) : (
         <PickersDay
@@ -65,6 +68,7 @@ const TrainingDay = (props: PickersDayProps<Dayjs>) => {
           disableHighlightToday
           disableRipple
           isFirstVisibleCell={false}
+          onClick={() => navigate(`/day/${date_format}`)}
         ></PickersDay>
       )}
     </>
@@ -91,7 +95,7 @@ const DateCalendarComponent: React.FC = () => {
       <StaticDatePicker
         sx={{
           border: '2px solid black',
-          bgcolor: 'orange',
+          bgcolor: 'lightgrey',
         }}
         displayStaticWrapperAs='desktop'
         openTo='day'
