@@ -1,24 +1,27 @@
 import * as React from 'react'
 // Redux imports
-import { useAppSelector } from '../app/hooks'
+import { setWorkoutOnDate } from '../features/history/HistorySlice'
+import { useAppSelector, useAppDispatch } from '../app/hooks'
 // MUI imports
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography, Button, Link } from '@mui/material'
 // MUI icons
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 // Router
-import { useParams } from 'react-router-dom'
+import { useParams, Link as RouterLink } from 'react-router-dom'
 
-const HistoryRoutinePage: React.FC = () => {
+const ChosenDay: React.FC = () => {
+  const dispatch = useAppDispatch()
   const { id } = useParams()
   const { history_store } = useAppSelector((state) => state.history)
+  const { all_routines } = useAppSelector((state) => state.routine)
+  const finded_routine = history_store.find((routine) => routine.date === id)
 
-  const finded_routine = history_store.find((routine) => routine.id === id)
-
+  const [hidden, setHidden] = React.useState(false)
   return (
     <Box>
       {finded_routine ? (
         <Container fixed sx={{ marginTop: '5rem', marginLeft: '55px' }}>
-          <Typography variant='h4'>Протокол</Typography>
+          <Typography variant='h4'>Протокол от {id}</Typography>
           <Typography variant='h4'>«{finded_routine.title}»</Typography>
           {/* exercises */}
           <Grid
@@ -144,9 +147,105 @@ const HistoryRoutinePage: React.FC = () => {
             })}
           </Grid>
         </Container>
-      ) : null}
+      ) : (
+        <Box sx={{ margin: '5rem' }}>
+          <Typography
+            variant='h6'
+            color='initial'
+            sx={{ marginBottom: '1rem' }}
+          >
+            {id} тренировка не записана
+          </Typography>
+          <Button
+            variant='outlined'
+            sx={{ marginBottom: '1rem' }}
+            onClick={() => setHidden(!hidden)}
+          >
+            {hidden ? 'Записать' : 'Скрыть'}
+          </Button>
+          <Box>
+            {!hidden ? (
+              <>
+                <Typography
+                  variant='h6'
+                  color='initial'
+                  sx={{ marginBottom: '1rem' }}
+                >
+                  Выбрать тренировку
+                </Typography>
+                {all_routines.map((routine) => {
+                  return (
+                    <Grid
+                      key={routine.id}
+                      container
+                      direction='row'
+                      justifyContent='space-between'
+                      alignItems='center'
+                      sx={{
+                        border: '2px solid #E1E1E1',
+                        marginTop: '5px',
+                        padding: '0 12px',
+                        borderRadius: '5px',
+                        bgcolor: '#F3F3F3',
+                        height: '125px',
+                      }}
+                    >
+                      <Link
+                        underline='none'
+                        component={RouterLink}
+                        to={`/routine/${routine.id}`}
+                        sx={{
+                          width: 'calc(100% - 45px)',
+                          padding: '20px',
+                          // paddingLeft: 'calc(-20px)',
+                          '&:hover': {
+                            transition: 0.2,
+                            bgcolor: '#b3b3b3',
+                            borderRadius: '5px',
+                          },
+                        }}
+                      >
+                        <Typography variant='h6'>
+                          {routine.title ? routine.title : 'пустая тренировка'}
+                        </Typography>
+                      </Link>
+                      {/* modal */}
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '1rem',
+                          paddingLeft: '20px',
+                        }}
+                      ></Box>
+                      <Button
+                        variant='contained'
+                        component={RouterLink}
+                        to={`/current_routine/${routine.id}`}
+                        sx={{
+                          fontSize: '15px',
+                          height: '24px',
+                          marginBottom: '5px',
+                          bgcolor: 'black',
+                          '&:hover': {
+                            bgcolor: 'grey',
+                          },
+                        }}
+                        onClick={() => dispatch(setWorkoutOnDate(id as string))}
+                      >
+                        Старт
+                      </Button>
+                    </Grid>
+                  )
+                })}
+              </>
+            ) : null}
+          </Box>
+        </Box>
+      )}
     </Box>
   )
 }
 
-export default HistoryRoutinePage
+export default ChosenDay

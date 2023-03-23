@@ -42,7 +42,12 @@ import {
   setIsDone,
   setIsUndone,
 } from '../features/routine/RoutineSlice'
-import { saveFinishedWorkout } from '../features/history/HistorySlice'
+import {
+  clearChosenDate,
+  saveFinishedWorkout,
+  setExircises,
+  setWorkoutOnDate,
+} from '../features/history/HistorySlice'
 import { IAction, IRoutine } from '../interfaces'
 import { SelectRestTimer } from '../components'
 import Paper from '@mui/material/Paper'
@@ -76,6 +81,7 @@ const CurrentWorkout: FC = () => {
   const { id } = useParams()
   const { all_routines } = useAppSelector((state) => state.routine)
   const { drawerOpen } = useAppSelector((state) => state.category)
+  const { date: chosenDate } = useAppSelector((state) => state.history)
   const [timeIsOver, setTimeIsOver] = useState(false)
   // timer
   const { time } = useTimer({
@@ -121,6 +127,8 @@ const CurrentWorkout: FC = () => {
     dispatch(saveFinishedWorkout(routine))
     navigate('/')
     dispatch(setIsUndone(routine.id))
+    dispatch(clearChosenDate())
+    dispatch(setExircises())
   }
 
   const handleIsDone = (load: IAction) => {
@@ -514,7 +522,10 @@ const CurrentWorkout: FC = () => {
                   exs: routine.exs,
                   category: routine.category,
                   time: time,
-                  date: `${day}-${month}-${year}`,
+                  date:
+                    chosenDate.length > 0
+                      ? chosenDate
+                      : `${day}-${month}-${year}`,
                 })
               }
               sx={{ border: '1px solid black' }}

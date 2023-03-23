@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import {
   addExercise,
@@ -64,6 +64,10 @@ const EditRoutinePage: FC = () => {
   const { drawerOpen } = useAppSelector((state) => state.category)
   const { id } = useParams()
 
+  const handleSave = () => {
+    dispatch(saveRoutine())
+  }
+
   const routine = all_routines.find((routine) => routine.id === id)
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -123,22 +127,36 @@ const EditRoutinePage: FC = () => {
                             {...provided.dragHandleProps}
                           >
                             <Grid item xs={10}>
-                              <TextField
-                                fullWidth
-                                id='filled-basic'
-                                variant='filled'
-                                label='Имя упражнения'
-                                value={ex.title}
-                                onChange={(e) =>
-                                  dispatch(
-                                    setExerciseName({
-                                      routine_id: routine.id,
-                                      ex_id,
-                                      title: e!.target.value,
-                                    })
-                                  )
-                                }
-                              />
+                              {ex.isNew ? (
+                                <TextField
+                                  fullWidth
+                                  id='filled-basic'
+                                  variant='filled'
+                                  label='Имя упражнения'
+                                  value={ex.title}
+                                  onChange={(e) =>
+                                    dispatch(
+                                      setExerciseName({
+                                        routine_id: routine.id,
+                                        ex_id,
+                                        title: e!.target.value,
+                                      })
+                                    )
+                                  }
+                                />
+                              ) : (
+                                <Typography
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start',
+                                    padding: '0.98rem',
+                                    borderBottom: '1px solid grey',
+                                  }}
+                                >
+                                  {ex.title ? ex.title : ''}
+                                </Typography>
+                              )}
                             </Grid>
                             <Grid item xs={2}>
                               <Grid
@@ -280,7 +298,7 @@ const EditRoutinePage: FC = () => {
                               </Grid>
                               {/* кнопки */}
                               <Grid item xs={3}>
-                                <Typography height={'28px'} />
+                                <Typography height={'27px'} />
                                 <MyHorizontalLine />
                                 {ex.sets?.map((set) => {
                                   return (
@@ -359,7 +377,7 @@ const EditRoutinePage: FC = () => {
               variant='contained'
               color='secondary'
               fullWidth
-              onClick={() => dispatch(saveRoutine())}
+              onClick={() => handleSave()}
               sx={{ border: '1px solid black' }}
             >
               <SaveIcon color='inherit' />

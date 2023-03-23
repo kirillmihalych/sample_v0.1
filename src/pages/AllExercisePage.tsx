@@ -1,6 +1,7 @@
 import * as React from 'react'
 // Redux imports
 import { useAppSelector } from '../app/hooks'
+import { getExercisesFromHistory } from '../features/history/HistorySlice'
 // MUI imports
 import { Box, Grid } from '@mui/material'
 // MUI custom search field imports
@@ -11,11 +12,16 @@ import SearchIcon from '@mui/icons-material/Search'
 // MUI icons
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 // Router
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 const AllExercisePage: React.FC = () => {
-  const { ex_names } = useAppSelector((state) => state.history)
+  const location = useLocation()
+  const { ex_names, history_store } = useAppSelector((state) => state.history)
   const [inputValue, setInputValue] = React.useState('')
+
+  React.useEffect(() => {
+    getExercisesFromHistory()
+  }, [history_store, location])
 
   const changeHandler = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
