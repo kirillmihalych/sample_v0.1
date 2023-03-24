@@ -55,7 +55,7 @@ interface IInitialStateProps {
 
 const initialState: IInitialStateProps = {
   history_store: loadFromLocalStorage(),
-  ex_names: [],
+  ex_names: getExercisesFromHistory(),
   date: '',
 }
 
