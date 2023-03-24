@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles'
 export const colorTheme = createTheme({
   typography: {
     fontFamily: ['PT Mono', 'monospace'].join(','),
-    fontSize: 16,
+    fontSize: 14,
   },
   palette: {
     primary: {
