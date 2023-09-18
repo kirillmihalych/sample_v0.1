@@ -144,7 +144,7 @@ const RoutineConstructor: FC = () => {
                               direction='column'
                               justifyContent='center'
                               alignItems='center'
-                              height={60}
+                              height={56}
                             >
                               <Button
                                 variant='outlined'
@@ -155,7 +155,8 @@ const RoutineConstructor: FC = () => {
                                   )
                                 }
                                 sx={{
-                                  height: 60,
+                                  // height: 5,
+                                  height: '100%',
                                   width: '100%',
                                   borderRadius: 0,
                                 }}
@@ -274,7 +275,7 @@ const RoutineConstructor: FC = () => {
                             </Grid>
                             {/* кнопки */}
                             <Grid item xs={3}>
-                              <Typography height={'28px'} />
+                              <Typography height={'24px'} />
                               <MyHorizontalLine />
                               {ex.sets?.map((set) => {
                                 return (

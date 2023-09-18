@@ -46,7 +46,6 @@ import {
   clearChosenDate,
   saveFinishedWorkout,
   setExircises,
-  setWorkoutOnDate,
 } from '../features/history/HistorySlice'
 import { IAction, IRoutine } from '../interfaces'
 import { SelectRestTimer } from '../components'
@@ -282,7 +281,7 @@ const CurrentWorkout: FC = () => {
                                 direction='column'
                                 justifyContent='center'
                                 alignItems='center'
-                                height={60}
+                                height={56}
                               >
                                 <Button
                                   variant='outlined'
@@ -425,7 +424,7 @@ const CurrentWorkout: FC = () => {
                               </Grid>
                               {/* кнопки */}
                               <Grid item xs={3}>
-                                <Typography height={'28px'} />
+                                <Typography height={'24px'} />
                                 <MyHorizontalLine />
                                 {ex.sets?.map((set) => {
                                   return (

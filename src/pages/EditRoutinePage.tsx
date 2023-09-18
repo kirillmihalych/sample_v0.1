@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import {
   addExercise,
@@ -164,7 +164,7 @@ const EditRoutinePage: FC = () => {
                                 direction='column'
                                 justifyContent='center'
                                 alignItems='center'
-                                height={60}
+                                height={56}
                               >
                                 <Button
                                   variant='outlined'
@@ -298,7 +298,7 @@ const EditRoutinePage: FC = () => {
                               </Grid>
                               {/* кнопки */}
                               <Grid item xs={3}>
-                                <Typography height={'27px'} />
+                                <Typography height={'24px'} />
                                 <MyHorizontalLine />
                                 {ex.sets?.map((set) => {
                                   return (

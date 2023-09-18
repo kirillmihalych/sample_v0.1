@@ -28,7 +28,9 @@ export const CreateCategoryModal: React.FC = () => {
   }
 
   const handleCreate = () => {
-    dispatch(addCategory(tempTitle))
+    if (tempTitle.length > 1) {
+      dispatch(addCategory(tempTitle))
+    }
     dispatch(closeModal())
   }
 
